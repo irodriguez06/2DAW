@@ -1,26 +1,17 @@
 Arquitectura client servidor, on s'executa el codi:
+- Client (Front-end): Part que utilitza l’usuari. Demana dades i les mostra.
+- Servidor (Back-end): Rep peticions, processa i guarda dades, i envia respostes.
 
-- El Client (Front-end): 
+Validacions:
+- Validació al client: Ràpida i dona feedback immediat, però no és segura perquè es pot saltar.
+- Validació al servidor: Obligatòria i segura. Comprova les dades abans de guardar-les.
 
-    - És el dispositiu o aplicació que utilitza l'usuari final. 
-    - S'encarrega de demanar les dades i de mostrar-les de forma visual. 
+Teoria GitHub:
+- .gitignore: Indica que no volem guardar.
+- Commits: Guardar els canvis del projecte. Serveixen per demostrar l’evolució del treball, inclosos errors o problemes.
+- Branques: **Ho estudiarem.
 
-- El Servidor (Back-end): 
+Teoria IA:
+- IA: Cal donar instruccions clares i específiques, indicant què volem i els casos.
 
-    - Connectat a la xarxa esperant peticions. 
-    - S'encarrega d'emmagatzemar les dades, processar-les  i enviar les respostes al client.
-
-Validacions client i servidor:
-
-- Validació al Client (Navegador): Feedback instantani, evita fer esperar l'usuari i estalvia feina al servidor. Es pot saltar fàcilment.
-- Validació al Servidor: Es fa per seguretat. És la obligatòria i important. Comprova que les dades siguin reals i segures abans de guardar-les.
-
-Teoria github:
-- Important el .gitignore, el ignore serveix per dir-li que NO VULL que em guardi.
-- IMPORTANT FER COMMITS (es el que demostra que estem treballant, no fa falta que sigui només de solucions, també poden ser per notificar que algo falla).
-- Branques *Ho estudiarem.
-
-IA:
-- Especificació: Hem de demanar les coses bé a la ia, hem d'especificar que volem (dir-li els casos).
-
-Concepte important: Client no fiable.
+Concepte clau: Client no fiable.
