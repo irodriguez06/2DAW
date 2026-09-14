@@ -1,0 +1,26 @@
+Arquitectura client servidor, on s'executa el codi:
+
+- El Client (Front-end): 
+
+    - És el dispositiu o aplicació que utilitza l'usuari final. 
+    - S'encarrega de demanar les dades i de mostrar-les de forma visual. 
+
+- El Servidor (Back-end): 
+
+    - Connectat a la xarxa esperant peticions. 
+    - S'encarrega d'emmagatzemar les dades, processar-les  i enviar les respostes al client.
+
+Validacions client i servidor:
+
+- Validació al Client (Navegador): Feedback instantani, evita fer esperar l'usuari i estalvia feina al servidor. Es pot saltar fàcilment.
+- Validació al Servidor: Es fa per seguretat. És la obligatòria i important. Comprova que les dades siguin reals i segures abans de guardar-les.
+
+Teoria github:
+- Important el .gitignore, el ignore serveix per dir-li que NO VULL que em guardi.
+- IMPORTANT FER COMMITS (es el que demostra que estem treballant, no fa falta que sigui només de solucions, també poden ser per notificar que algo falla).
+- Branques *Ho estudiarem.
+
+IA:
+- Especificació: Hem de demanar les coses bé a la ia, hem d'especificar que volem (dir-li els casos).
+
+Concepte important: Client no fiable.
