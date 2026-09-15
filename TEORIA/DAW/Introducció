@@ -1,1 +1,29 @@
+Evolució: 
+  Web 1.0 --> Només lectura, 0 interacció
+  Web 2.0 --> Comunitats, interració amb els usuaris (xarxes socials, blogs, wikis, ...)
+  Web 3.0 --> Obertura a l'accés a les dades (metadades, bases de dades, cloud, vinculació, AJAX, inteligència artificial, tauletes, rellotges, ...)
+  Web 4.0 --> La més personalitzada (NLU, M2M, Personalització, ...), interacció web-usuari molt profunda
 
+Client - Servidor:
+  Model bàsic: Client web, servidor web amb recursos
+  
+  Tipus de Servidor segons l'Estat:
+     --> Sense estat: No manté informació
+     --> Amb estat: Recorda dades
+
+Les aplicacions web es poden basar en 4 models:
+  - Model client servidor
+  - Model servidor encadenat (Fortnite, Minecraft)
+  - Model Aplicacions basades en web
+  - Model d'igual a igual (P2P)
+
+Servei vs Servei Web
+
+Pàgina Web vs Aplicació web
+
+Arquitactura Web --> Infraesctructura (escalabilitat, separació de responsabilitats, portabilitat, serveis, model de capes)
+
+Model de capes es compón per capes --> capa de visualització o presentació, capa de funcionalitats o negoci, capa de dades
+
+Proxy Web --> Intermediari entre client - servidor
+Directe o Indirecte
