@@ -1,1 +1,73 @@
+Demanem la informació a la BDD
+La informació la passem a una interface per veure-la
+Escalable --> Pot anar creixent amb el temps, més funcionalitats
+APIs
+Llibreria --> Conjunt de (funcions, clases, ...) que podem fer servir pel nostre codi
+Package JSON --> Guarda les llibreries amb la versió
 
+Creació inicial api:
+sudo apt update -y
+sudo apt install npm
+mkdir nom_api
+cd nom_api
+npm init -y
+
+Instal·lació express:
+npm install express
+
+Instal·lació dependències desenvolupament per treballar amb Typescript:
+npm install -D typescript tsx @types/express
+
+Creació fitxer config de Typescript:
+npx tsc --init
+
+Creació carpeta del codi font:
+mkdir src
+New-Item src/index.ts -ItemType File
+
+Afegir scripts:
+npm pkg set scripts.dev="tsx src/index.ts"
+npm pkg set scripts.build="tsc"
+npm pkg set scripts.start="node dist/index.js"
+
+Configuració de Typescript --> al fitxer tsconfig.json substituim i fiquem:
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "rootDir": "src",
+    "outDir": "dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "declaration": false
+  },
+  "include": ["src"]
+}
+
+Codi mínim express per index.ts, el mínim per crear una API bàsica:
+import express, { Express, Request, Response } from "express";
+
+const port: number = 3000;
+
+const app: Express = express();
+
+app.get("/", (_req: Request, res: Response) => { // _req → petició rebuda però no utilitzada
+  res.json({ message: "API funcionant correctament" });
+});
+
+app.listen(port, () => {
+  console.log(`Servidor escoltant a http://localhost:${port}`);
+});
+
+Executar el servidor:
+npm run dev
+Entrar a http://localhost:3000 per veure el missatge que està funcionant correctament
+
+Preparar el projecte per a producció:
+npm run build --> genera dist/
+npm start --> executar el servidor
+
+get --> demanar info
