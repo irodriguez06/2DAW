@@ -7,4 +7,8 @@ Teoria IA:
 - IA: Cal donar instruccions clares i específiques, indicant què volem i els casos.
 - Importància de l'error.
 - Context --> Informació que sap la IA de la conversa (a partir del que l'hi he dit).
-- Finestra context
+- Finestra context.
+
+Interface:
+- És lo més semblant a una classe a TypeScript.
+- Utilitzar JSON per intercanviar dades, de string-->interface / interface-->string
