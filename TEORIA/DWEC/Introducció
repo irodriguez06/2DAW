@@ -6,12 +6,4 @@ Validacions:
 - Validació al client: Ràpida i dona feedback immediat, però no és segura perquè es pot saltar.
 - Validació al servidor: Obligatòria i segura. Comprova les dades abans de guardar-les.
 
-Teoria GitHub:
-- .gitignore: Indica que no volem guardar.
-- Commits: Guardar els canvis del projecte. Serveixen per demostrar l’evolució del treball, inclosos errors o problemes.
-- Branques: **Ho estudiarem.
-
-Teoria IA:
-- IA: Cal donar instruccions clares i específiques, indicant què volem i els casos.
-
 Concepte clau: Client no fiable.
