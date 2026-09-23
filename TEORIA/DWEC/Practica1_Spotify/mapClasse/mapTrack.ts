@@ -5,10 +5,14 @@ interface Canco {
     durada: number;
 }
 
+interface Temps {
+    minuts: number;
+    segons: number;
+}
+
 interface Track {
     title: string;
-    minutes: number;
-    seconds: number;
+    duration: Temps;
 }
 
 const cancons: Canco[] = [
@@ -32,27 +36,32 @@ const cancons: Canco[] = [
     }
 ];
 
-const tracks: Track[] = cancons.map(
+const songsString: string[] = cancons.map(
     (c: Canco) => {
 
         let minuts: number = Math.floor(c.durada / 60);
         let segons: number = c.durada % 60;
 
-        return {
-            title: c.titol,
-            minutes: minuts,
-            seconds: segons
-        };
+        let text: string = `${c.titol} (${c.artitsta} - Temps: ${minuts}:${segons})`;
+        return text.trim();
+    }
+);
+
+function convertirTemps(temps: number):Temps {
+    return {
+        minuts: Math.floor(temps / 60),
+        segons: temps % 60
+    }
+};
+
+const tracks: Track[] = cancons.map(
+    (c: Canco) => {
+        return  { title: c.titol, duration: convertirTemps(c.durada) };
     }
 );
 
 tracks.forEach(
     (t: Track) => {
-        console.log(
-            "titol: " + t.title +
-            " durada: " + t.minutes +
-            " minuts " + t.seconds +
-            " segons"
-        );
+        console.log(`${t.title}: ${t.duration.minuts} minuts ${t.duration.segons} segons`);
     }
 );
