@@ -39,7 +39,7 @@ function equipTitular(equips: Equips[], nomEquip: string): Jugador[] {
     )[0];
 
     return equipFinal.jugadors.filter(
-        (j: Jugador) => j.titular === true
+        (j: Jugador) => j.titular
     );
 }
 
