@@ -1,1 +1,7 @@
-
+HTTP: Protocol de transferència d'hipertext.Permet intercanvi de documents d'hipertext
+  - Port 80
+  - Peticio resposta
+URL: La suma de URN i URI. Localitzar identificar recurs a Internert
+  - Parts: query, anchor (pregunta i fragment)
+URN: Només identifica
+URI: Pregunta i fragment
