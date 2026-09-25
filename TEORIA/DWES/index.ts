@@ -27,6 +27,26 @@ app.get("/tracks/:id", (req: Request, res: Response) => {
     return res.status(200).json(track);
 });
 
+// saber totes les llistes de reproducció d'un usuari
+// /usuaris/:id/playlists
+// les ultimes cancons que ha escoltat un usuari
+// /usuaris/:id/songs/latest
+// ultimes cancones carregades al aplicatiu
+// /songs/uploaded/latest
+// totes cancons d'una playlist d'un usuari
+// /usuaris/:id/playlist/:idPlaylist/songs
+// el meu perfil
+// /usaris/profile
+// el perfil d'un altre usuari
+// /usuaris/:id/profile
+// musica mes reproduida
+// /songs/popular
+// mes reproduida d'un artista
+// /artist/:id/songs/popular
+// artista amb mes reproduccions i oyents
+// /artist/followers/popular
+// /artist/users/reproductions
+
 app.listen(APICONFIG.port, APICONFIG.host, () => {
     console.log(`Servidor escoltant a ${APICONFIG.host}:${APICONFIG.port}`);
 });
