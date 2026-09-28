@@ -8,25 +8,17 @@ import { llistaCancons } from './view/tableSongs/llistaCancons';
 
 const appObj: HTMLDivElement = document.querySelector<HTMLDivElement>('#app')!;
 const tbody: HTMLTableSectionElement = document.createElement("tbody");
-const detall: HTMLDivElement = document.createElement("div");
-const textDetall: HTMLParagraphElement = document.createElement("p");
-detall.appendChild(textDetall);
+const cardTrack: HTMLDivElement = document.createElement("div");
+const textTrack: HTMLParagraphElement = document.createElement("p");
+cardTrack.appendChild(textTrack);
 
-const seleccionar: (id: string) => void = (id: string) => {
+const emplenarCardTrack: (id: string) => void = (id: string) => {
     console.log(id);
-    const track: Track | undefined = tracks.find((t: Track) => { return t.id === id; });
-    if (track) {
-        textDetall.textContent = `${track.title} - ${track.artist}`;
+    const t: Track | undefined = tracks.find((track: Track) => { return track.id === id; });
+    if (t) {
+        textTrack.textContent = `${t.title} - ${t.artist}`;
     }
 };
-
-tbody.addEventListener("click", (e: MouseEvent) => {
-    const target: HTMLElement = e.target as HTMLElement;
-    const tr: HTMLTableRowElement | null = target.closest<HTMLTableRowElement>("tr");
-    if (tr && tr.dataset.id) {
-        seleccionar(tr.dataset.id);
-    }
-});
 
 const cercar: (textABuscar: string) => void = (textABuscar: string) => {
     const llistaTracks: Track[] = tracks.filter(
@@ -37,6 +29,6 @@ const cercar: (textABuscar: string) => void = (textABuscar: string) => {
 }
 
 appObj.appendChild(crearTitol());
-appObj.appendChild(crearTableSongs(tbody));
+appObj.appendChild(crearTableSongs(tbody, emplenarCardTrack));
 appObj.appendChild(crearCerca(cercar));
-appObj.appendChild(detall);
+appObj.appendChild(cardTrack);
