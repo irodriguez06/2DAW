@@ -4,7 +4,8 @@ import { crearTableSongs } from './view/tableSongs/crearTableSongs';
 import { crearTitol } from './view/tableSongs/crearTitol';
 
 const appObj:HTMLDivElement = document.querySelector<HTMLDivElement>('#app')!;
+const tbody:HTMLTableSectionElement = document.createElement("tbody");
 
 appObj.appendChild(crearTitol());
-appObj.appendChild(crearTableSongs());
+appObj.appendChild(crearTableSongs(tbody));
 appObj.appendChild(crearCerca());
