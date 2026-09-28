@@ -25,7 +25,7 @@ const cercar: (textABuscar: string) => void = (textABuscar: string) => {
         (t: Track) => { return t.title.toLowerCase().includes(textABuscar.trim().toLowerCase()); }
     );
     tbody.innerHTML = "";
-    llistaCancons(llistaTracks, tbody);
+    llistaCancons(llistaTracks, tbody, emplenarCardTrack);
 }
 
 appObj.appendChild(crearTitol());
