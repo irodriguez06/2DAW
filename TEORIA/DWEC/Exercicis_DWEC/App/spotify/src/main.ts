@@ -23,8 +23,8 @@ const seleccionar: (id: string) => void = (id: string) => {
 tbody.addEventListener("click", (e: MouseEvent) => {
     const target: HTMLElement = e.target as HTMLElement;
     const tr: HTMLTableRowElement | null = target.closest<HTMLTableRowElement>("tr");
-    if (tr && tr.id) {
-        seleccionar(tr.id);
+    if (tr && tr.dataset.id) {
+        seleccionar(tr.dataset.id);
     }
 });
 
