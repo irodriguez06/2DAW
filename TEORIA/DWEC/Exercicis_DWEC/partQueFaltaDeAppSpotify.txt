@@ -1,0 +1,13 @@
+FET --> quan clici el titol o la durada es mostri l'identificador de l'element clicat a la consola
+
+FET --> quan clici el titol o la durada es mostri a la pantalla el titol de la canco amb el seu artista (no fer-ho per posicions, anar a buscar el artista ara que tenim el id)
+
+NO FET --> ara afegir una X a sota del titol de la canco i artista mostrats que al clicar la X permeteixi tencar el que s'ha obert, basicament un boto de tencar
+
+// codi exemple de com seria la funció fet a clase:
+// emplanarcardtrack(track.id) addeventlistener
+// const cardtrack ? emplenarcardtrack(id)
+// t = buscar track (find)
+// emplenarcard --> es trivial
+// p --> text a desar
+// cerca (getvaluesearch) --> cerca --> setvaluesearch --> input
