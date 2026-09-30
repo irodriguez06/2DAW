@@ -27,6 +27,7 @@ const emplenarCardTrack: (id: string) => void = (id: string) => {
     const t: Track | undefined = tracks.find((track: Track) => { return track.id === id; });
     if (t) {
         textTrack.textContent = `${t.title} - ${t.artist}`;
+        cardTrack.style.display = "block";
     }
 };
 
