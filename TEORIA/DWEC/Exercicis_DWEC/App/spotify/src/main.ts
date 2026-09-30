@@ -19,8 +19,8 @@ botoTancar.addEventListener("click", () => {
 });
 
 cardTrack.appendChild(textTrack);
-
-
+cardTrack.appendChild(botoTancar);
+cardTrack.style.display = "none";
 
 const emplenarCardTrack: (id: string) => void = (id: string) => {
     console.log(id);
