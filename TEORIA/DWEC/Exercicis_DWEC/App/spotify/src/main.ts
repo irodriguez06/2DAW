@@ -5,33 +5,17 @@ import { crearCerca } from './view/cerca/cerca';
 import { crearTableSongs } from './view/tableSongs/crearTableSongs';
 import { crearTitol } from './view/tableSongs/crearTitol';
 import { llistaCancons } from './view/tableSongs/llistaCancons';
+import { crearBotoTancar } from './view/tableSongs/crearBotoTancar';
+
 
 const appObj: HTMLDivElement = document.querySelector<HTMLDivElement>('#app')!;
 const tbody: HTMLTableSectionElement = document.createElement("tbody");
 const cardTrack: HTMLDivElement = document.createElement("div");
 
-
-
-
 const emplenarCardTrack: (id: string) => void = (id: string) => {
     const t: Track | undefined = tracks.find((track: Track) => { return track.id === id; });
-    const textTrack: HTMLParagraphElement = document.createElement("p");
-    const botoTancar: HTMLButtonElement = document.createElement("button");
-
     if (t) {
-            cardTrack.innerHTML = ""
-            botoTancar.addEventListener("click", () => {
-                cardTrack.innerHTML = ""
-            });
-            botoTancar.type = "button";
-            botoTancar.textContent = "X";
-            
-
-            cardTrack.appendChild(textTrack);
-            cardTrack.appendChild(botoTancar);
-            cardTrack.style.display = "none";
-            textTrack.textContent = `${t.title} - ${t.artist}`;
-            cardTrack.style.display = "block";
+        crearBotoTancar(t, cardTrack);
     }
 };
 
