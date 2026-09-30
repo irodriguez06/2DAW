@@ -9,25 +9,29 @@ import { llistaCancons } from './view/tableSongs/llistaCancons';
 const appObj: HTMLDivElement = document.querySelector<HTMLDivElement>('#app')!;
 const tbody: HTMLTableSectionElement = document.createElement("tbody");
 const cardTrack: HTMLDivElement = document.createElement("div");
-const textTrack: HTMLParagraphElement = document.createElement("p");
-const botoTancar: HTMLButtonElement = document.createElement("button");
 
-botoTancar.type = "button";
-botoTancar.textContent = "X";
-botoTancar.addEventListener("click", () => {
-    cardTrack.style.display = "none";
-});
 
-cardTrack.appendChild(textTrack);
-cardTrack.appendChild(botoTancar);
-cardTrack.style.display = "none";
+
 
 const emplenarCardTrack: (id: string) => void = (id: string) => {
-    console.log(id);
     const t: Track | undefined = tracks.find((track: Track) => { return track.id === id; });
+    const textTrack: HTMLParagraphElement = document.createElement("p");
+    const botoTancar: HTMLButtonElement = document.createElement("button");
+
     if (t) {
-        textTrack.textContent = `${t.title} - ${t.artist}`;
-        cardTrack.style.display = "block";
+            cardTrack.innerHTML = ""
+            botoTancar.addEventListener("click", () => {
+                cardTrack.innerHTML = ""
+            });
+            botoTancar.type = "button";
+            botoTancar.textContent = "X";
+            
+
+            cardTrack.appendChild(textTrack);
+            cardTrack.appendChild(botoTancar);
+            cardTrack.style.display = "none";
+            textTrack.textContent = `${t.title} - ${t.artist}`;
+            cardTrack.style.display = "block";
     }
 };
 

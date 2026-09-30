@@ -18,8 +18,19 @@ export function createRowSong(
         emplenarCardTrack(track.id);
     });
 
+    const reproduccionsTd: HTMLTableCellElement = document.createElement("td");
+    const textReproduccions: HTMLSpanElement = document.createElement("span");
+    textReproduccions.textContent = "0";
+    const botoPlay: HTMLButtonElement = document.createElement("button");
+    botoPlay.type = "button";
+    botoPlay.textContent = "Play";
+
     songTr.appendChild(titleTd);
     songTr.appendChild(durationTd);
+    songTr.appendChild(reproduccionsTd);
+
+    reproduccionsTd.appendChild(textReproduccions);
+    reproduccionsTd.appendChild(botoPlay);
 
     return songTr;
 }
