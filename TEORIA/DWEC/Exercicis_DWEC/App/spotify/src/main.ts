@@ -10,7 +10,17 @@ const appObj: HTMLDivElement = document.querySelector<HTMLDivElement>('#app')!;
 const tbody: HTMLTableSectionElement = document.createElement("tbody");
 const cardTrack: HTMLDivElement = document.createElement("div");
 const textTrack: HTMLParagraphElement = document.createElement("p");
+const botoTancar: HTMLButtonElement = document.createElement("button");
+
+botoTancar.type = "button";
+botoTancar.textContent = "X";
+botoTancar.addEventListener("click", () => {
+    cardTrack.style.display = "none";
+});
+
 cardTrack.appendChild(textTrack);
+
+
 
 const emplenarCardTrack: (id: string) => void = (id: string) => {
     console.log(id);
