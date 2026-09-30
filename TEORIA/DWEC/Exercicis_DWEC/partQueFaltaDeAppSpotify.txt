@@ -2,12 +2,25 @@ FET --> quan clici el titol o la durada es mostri l'identificador de l'element c
 
 FET --> quan clici el titol o la durada es mostri a la pantalla el titol de la canco amb el seu artista (no fer-ho per posicions, anar a buscar el artista ara que tenim el id)
 
-NO FET --> ara afegir una X a sota del titol de la canco i artista mostrats que al clicar la X permeteixi tencar el que s'ha obert, basicament un boto de tencar
+FET --> ara afegir una X a sota del titol de la canco i artista mostrats que al clicar la X permeteixi tencar el que s'ha obert, basicament un boto de tencar
 
-// codi exemple de com seria la funció fet a clase:
-// emplanarcardtrack(track.id) addeventlistener
-// const cardtrack ? emplenarcardtrack(id)
-// t = buscar track (find)
-// emplenarcard --> es trivial
-// p --> text a desar
-// cerca (getvaluesearch) --> cerca --> setvaluesearch --> input
+codi exemple de com seria la funció fet a clase:
+emplanarcardtrack(track.id) addeventlistener
+const cardtrack ? emplenarcardtrack(id)
+t = buscar track (find)
+emplenarcard --> es trivial
+p --> text a desar
+cerca (getvaluesearch) --> cerca --> setvaluesearch --> input
+
+
+afegir 0 a la dreta de cada canco i boto play a la dreta, amb un text que digui Reproduccions,
+per cada exercici s'ahura de fer un commit
+
+NO FET --> exerici 1: mostrar nomes el 0 a la dreta amb el boto play (que no fagin res)
+
+NO FET --> exercici 2: quan fem clic al boto play, que incrementi el numero de reproducciones en 1, 
+el boto de play canvia de nom a playing, pero els altres si clicas TAMBE han de canviar a playing, no fa falta encara que si cliquem un altre boto el que teniem abans a playing canvii a play
+
+NO FET --> exericic 3: deshabilitar el playing quan cliquem el mateix boto de play un altre cop
+
+NO FET --> exercici 4: deshabilitar el playing quan cliquem un altre boto
