@@ -16,7 +16,7 @@ cerca (getvaluesearch) --> cerca --> setvaluesearch --> input
 afegir 0 a la dreta de cada canco i boto play a la dreta, amb un text que digui Reproduccions,
 per cada exercici s'ahura de fer un commit
 
-NO FET --> exerici 1: mostrar nomes el 0 a la dreta amb el boto play (que no fagin res)
+FET --> exerici 1: mostrar nomes el 0 a la dreta amb el boto play (que no fagin res)
 
 NO FET --> exercici 2: quan fem clic al boto play, que incrementi el numero de reproducciones en 1, 
 el boto de play canvia de nom a playing, pero els altres si clicas TAMBE han de canviar a playing, no fa falta encara que si cliquem un altre boto el que teniem abans a playing canvii a play
