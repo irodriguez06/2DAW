@@ -51,7 +51,7 @@ app.get("/tracks/:id", (req: Request, res: Response) => {
 // /artist/followers/popular
 // /artist/users/reproductions
 
-app.get("/tracks", (req: Request, res: Response) => {
+app.post("/tracks", (req: Request, res: Response) => {
     const track:Track = req.body;
     if (!isValidTrack(track)) {
         return res.status(400).json({ message: "Invalid data"});
@@ -66,6 +66,7 @@ app.get("/tracks", (req: Request, res: Response) => {
         duration: track.duration,
     };
 
+    tracks.push(trackRecord);
     return res.status(201).json(track);
 });
 
