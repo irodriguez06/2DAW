@@ -32,14 +32,12 @@ app.get("/artists", (_req: Request, res: Response) => {
 
 app.get("/tracks/:id", (req: Request, res: Response) => {
     const idTrack: string = req.params.id as string;
-    const track: TrackBD[] = tracks.filter(
-        (t:TrackBD) => {return t.id === idTrack}
-    );
+    const findTrack: TrackBD | undefined = tracks.find((t: TrackBD) => t.id === idTrack);
 
-    if (track.length === 0) {
-        return res.status(404).json({message: `Track ${idTrack} not found`});
+    if (!findTrack) {
+        return res.status(404).json({message: `Track not found`});
     }
-    return res.status(200).json(track);
+    return res.status(200).json(findTrack);
 });
 
 app.get("/artists/:id", (req: Request, res: Response) => {
@@ -114,6 +112,32 @@ app.post("/artists", (req: Request, res: Response) => {
     artists.push(artistRecord);
     return res.status(201).json(artist);
 });
+
+// puts
+app.put('/tracks/:id', (req: Request, res: Response) => {
+    const track: Track = req.body;
+
+    if (!isValidTrack(track)) {
+        return res.status(400).json({ message: "Invalid data" });
+    }
+    
+    const idTrack: string = req.params.id as string;
+    const index: number = tracks.findIndex((t: TrackBD) => t.id === idTrack);
+    if (index === -1) {
+        return res.status(404).json({message: `Track not found`});
+    }
+
+    tracks [index] = {
+        id: idTrack,
+        title: track.title.trim().replace("/\s+/g", " "),
+        artist: track.artist.trim().replace("/\s+/g", " "),
+        duration: track.duration,
+    };
+
+    return res.status(200).json(tracks[index]);
+});
+
+// listen
 
 app.listen(APICONFIG.port, APICONFIG.host, () => {
     console.log(`Servidor escoltant a ${APICONFIG.host}:${APICONFIG.port}`);
