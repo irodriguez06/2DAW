@@ -5,11 +5,16 @@ import { tracks } from "./data/track/track";
 import { Track } from "./interfaces/track/track";
 import { isValidTrack } from "./validators/track.Validator";
 import { randomUUID } from "crypto";
+import { artists } from "./data/track/artist/artist";
+import { ArtistBD } from "./interfaces/artist/artistBD";
+import { isValidArtist } from "./validators/artistValidator";
 
 const port: number = 3000;
 
 const app: Express = express();
 app.use(express.json());
+
+// Gets
 
 app.get("/", (_req: Request, res: Response) => { // _req → petició rebuda però no utilitzada
     return res.status(200).json(JSON.stringify(APICONFIG));
@@ -18,6 +23,12 @@ app.get("/", (_req: Request, res: Response) => { // _req → petició rebuda per
 app.get("/tracks", (_req: Request, res: Response) => {
     return res.status(200).json(tracks);
 });
+
+app.get("/artists", (_req: Request, res: Response) => {
+    return res.status(200).json(artists);
+});
+
+// get de id
 
 app.get("/tracks/:id", (req: Request, res: Response) => {
     const idTrack: string = req.params.id as string;
@@ -30,6 +41,19 @@ app.get("/tracks/:id", (req: Request, res: Response) => {
     }
     return res.status(200).json(track);
 });
+
+app.get("/artists/:id", (req: Request, res: Response) => {
+    const idArtist: string = req.params.id as string;
+    const artist: ArtistBD[] = artists.filter(
+        (a: ArtistBD) => {return a.id === idArtist}
+    );
+
+    if (artist.length === 0) {
+        return res.status(404).json({message: `Artist ${idArtist} not found`});
+    }
+    return res.status(200).json(artist);
+});
+
 
 // saber totes les llistes de reproducció d'un usuari
 // /usuaris/:id/playlists
@@ -69,6 +93,26 @@ app.post("/tracks", (req: Request, res: Response) => {
     //important: fer push
     tracks.push(trackRecord);
     return res.status(201).json(track);
+});
+
+app.post("/artists", (req: Request, res: Response) => {
+    const artist: ArtistBD = req.body;
+    if (!isValidArtist(artist)) {
+        return res.status(400).json({ message: "Invalid data"});
+    };
+
+    const uuid:string = randomUUID();
+
+    const artistRecord: ArtistBD = {
+        id: uuid,
+        nom: artist.nom.trim().replace("/\s+/g", " "),
+        alias: artist.alias.trim().replace("/\s+/g", " "),
+        pais: artist.pais.trim().replace("/\s+/g", " "),
+    };
+
+    //important: fer push
+    artists.push(artistRecord);
+    return res.status(201).json(artist);
 });
 
 app.listen(APICONFIG.port, APICONFIG.host, () => {
