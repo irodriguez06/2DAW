@@ -137,6 +137,20 @@ app.put('/tracks/:id', (req: Request, res: Response) => {
     return res.status(200).json(tracks[index]);
 });
 
+// delete
+app.delete('/tracks/:id', (req: Request, res: Response) => {
+    
+    const idTrack: string = req.params.id as string;
+    const index: number = tracks.findIndex((t: TrackBD) => t.id === idTrack);
+    if (index === -1) {
+        return res.status(404).json({message: `Track not found`});
+    }
+
+    tracks.splice(index, 1);
+
+    return res.status(204).json({message: "Track deleted"});
+});
+
 // listen
 
 app.listen(APICONFIG.port, APICONFIG.host, () => {
