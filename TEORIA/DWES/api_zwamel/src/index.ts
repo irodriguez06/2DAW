@@ -66,6 +66,7 @@ app.post("/tracks", (req: Request, res: Response) => {
         duration: track.duration,
     };
 
+    //important: fer push
     tracks.push(trackRecord);
     return res.status(201).json(track);
 });
