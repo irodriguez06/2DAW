@@ -1,0 +1,1 @@
+export const MAXPLAYLISTTRACKSNAME: number = 50;
