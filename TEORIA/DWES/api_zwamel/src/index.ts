@@ -58,6 +58,34 @@ app.get("/artists", (_req: Request, res: Response) => {
     return res.status(200).json(artists);
 });
 
+app.get("/albums", (_req: Request, res: Response) => {
+    return res.status(200).json(albums);
+});
+
+app.get("/albumTracks", (_req: Request, res: Response) => {
+    return res.status(200).json(albumTracks);
+});
+
+app.get("/countries", (_req: Request, res: Response) => {
+    return res.status(200).json(countries);
+});
+
+app.get("/history", (_req: Request, res: Response) => {
+    return res.status(200).json(history);
+});
+
+app.get("/playlist", (_req: Request, res: Response) => {
+    return res.status(200).json(playlist);
+});
+
+app.get("/playlistTracks", (_req: Request, res: Response) => {
+    return res.status(200).json(playlistTracks);
+});
+
+app.get("/users", (_req: Request, res: Response) => {
+    return res.status(200).json(users);
+});
+
 // get de id
 
 app.get("/tracks/:id", (req: Request, res: Response) => {
