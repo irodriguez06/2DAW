@@ -1,1 +1,1 @@
-export const MAXHISTORYNAME: number = 50;
+export const MAXHISTORYDATA: number = 50;

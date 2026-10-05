@@ -1,4 +1,4 @@
-import { Playlist } from "./paylist";
+import { Playlist } from "./playlist";
  
 export interface PlaylistBD extends Playlist {
     id: string;
