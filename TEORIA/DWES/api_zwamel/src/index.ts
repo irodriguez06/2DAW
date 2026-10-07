@@ -10,10 +10,11 @@ import { isValidTrack } from "./validators/track.Validator";
 import { artists } from "./data/track/artist/artist";
 import { ArtistBD } from "./interfaces/artist/artistBD";
 import { isValidArtist } from "./validators/artistValidator";
-import { createTrack, getAllTracks, getTrackById, updateTrack } from "./serveis/track/trackService";
+import { createTrack, deleteTrack, getAllTracks, getTrackById, updateTrack } from "./serveis/track/trackService";
 import { ErrorService } from "./interfaces/error/errorService";
 import { CreateSuccessService } from "./interfaces/error/createSuccessService";
 import { UpdateSuccessService } from "./interfaces/error/updateSuccessService";
+import { DeleteSuccessService } from "./interfaces/error/deleteSuccessService";
 
 const port: number = 3000;
 
@@ -87,33 +88,32 @@ app.post("/tracks", (req: Request, res: Response) => {
 
 // puts
 app.put('/tracks/:id', (req: Request, res: Response) => {
- 
-    const idTrack: string = req.params.id as string;
-    const result: UpdateSuccessService<TrackBD> | ErrorService = updateTrack(idTrack, req.body);
+    const result: UpdateSuccessService<TrackBD> | ErrorService = updateTrack(req.params.id as string, req.body);
  
     if (!result.success) {
         const ErrorResult = result as ErrorService;
         return res.status(result.code).json({ message: ErrorResult.message });
     }
  
-    const successResult = result as UpdateSuccessService<TrackBD>;
-    tracks[successResult.index] = successResult.data;
+    const index:number = (result as UpdateSuccessService<TrackBD>).index;
+    tracks[index] = (result as UpdateSuccessService<TrackBD>)['data'];
  
     return res.status(result.code).json(result);
 });
 
 // delete
 app.delete('/tracks/:id', (req: Request, res: Response) => {
-    
-    const idTrack: string = req.params.id as string;
-    const index: number = tracks.findIndex((t: TrackBD) => t.id === idTrack);
-    if (index === -1) {
-        return res.status(404).json({message: `Track not found`});
+    const result: DeleteSuccessService | ErrorService = deleteTrack(req.params.id as string);
+
+    if (!result.success) {
+        const ErrorResult = result as ErrorService;
+        return res.status(result.code).json({ message: ErrorResult.message });
     }
 
+    const index: number = (result as DeleteSuccessService).index;
     tracks.splice(index, 1);
 
-    return res.status(204).json({message: "Track deleted"});
+    return res.status(result.code).json(result);
 });
 
 // listen

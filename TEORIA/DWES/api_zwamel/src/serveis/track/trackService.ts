@@ -6,6 +6,7 @@ import { Track } from "../../interfaces/track/track";
 import { TrackBD } from "../../interfaces/track/trackBD";
 import { isValidTrack } from "../../validators/track.Validator";
 import { randomUUID } from "crypto";
+import { DeleteSuccessService } from "../../interfaces/error/deleteSuccessService";
 
 export function getAllTracks(): TrackBD [] {
     return tracks;
@@ -53,4 +54,14 @@ export function updateTrack(idTrack: string, track: Track): UpdateSuccessService
  
     return { success: true, code: 200, data: trackRecord, index: index };
 }
- 
+
+export function deleteTrack(idTrack: string): DeleteSuccessService | ErrorService {
+       
+    const index: number = tracks.findIndex((t: TrackBD) => t.id === idTrack);
+    
+    if (index === -1) {
+        return { success: false, code: 404, message: `Track ${idTrack} not found` };
+    }
+
+    return { success: true, code: 204, index: index, message: "Track deleted" };
+};
