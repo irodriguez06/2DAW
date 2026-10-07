@@ -10,9 +10,10 @@ import { isValidTrack } from "./validators/track.Validator";
 import { artists } from "./data/track/artist/artist";
 import { ArtistBD } from "./interfaces/artist/artistBD";
 import { isValidArtist } from "./validators/artistValidator";
-import { createTrack, getAllTracks, getTrackById } from "./serveis/track/trackService";
+import { createTrack, getAllTracks, getTrackById, updateTrack } from "./serveis/track/trackService";
 import { ErrorService } from "./interfaces/error/errorService";
-import { SuccesService } from "./interfaces/error/succesService";
+import { CreateSuccessService } from "./interfaces/error/createSuccessService";
+import { UpdateSuccessService } from "./interfaces/error/updateSuccessService";
 
 const port: number = 3000;
 
@@ -60,13 +61,14 @@ app.get("/artists/:id", (req: Request, res: Response) => {
 
 app.post("/tracks", (req: Request, res: Response) => {
 
-    const result: SuccesService<TrackBD> | ErrorService = createTrack(req.body);
+    const result: CreateSuccessService<TrackBD> | ErrorService = createTrack(req.body);
 
     if (!result.success) {
         const ErrorResult = result as ErrorService;
         return res.status(result.code).json({ message: ErrorResult.message });
     }
 
+    tracks.push((result as CreateSuccessService<TrackBD>).data);
     return res.status(result.code).json(result);
 });
 
@@ -92,26 +94,16 @@ app.post("/artists", (req: Request, res: Response) => {
 
 // puts
 app.put('/tracks/:id', (req: Request, res: Response) => {
-    const track: Track = req.body;
 
-    if (!isValidTrack(track)) {
-        return res.status(400).json({ message: "Invalid data" });
-    }
-    
     const idTrack: string = req.params.id as string;
-    const index: number = tracks.findIndex((t: TrackBD) => t.id === idTrack);
-    if (index === -1) {
-        return res.status(404).json({message: `Track not found`});
+    const result: UpdateSuccessService<TrackBD> | ErrorService = updateTrack(idTrack, req.body);
+
+    if (!result.success) {
+        const ErrorResult = result as ErrorService;
+        return res.status(result.code).json({ message: ErrorResult.message });
     }
 
-    tracks [index] = {
-        id: idTrack,
-        title: track.title.trim().replace("/\s+/g", " "),
-        artist: track.artist.trim().replace("/\s+/g", " "),
-        duration: track.duration,
-    };
-
-    return res.status(200).json(tracks[index]);
+    return res.status(result.code).json(result);
 });
 
 // delete
