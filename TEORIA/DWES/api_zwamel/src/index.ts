@@ -10,34 +10,6 @@ import { isValidTrack } from "./validators/track.Validator";
 import { artists } from "./data/track/artist/artist";
 import { ArtistBD } from "./interfaces/artist/artistBD";
 import { isValidArtist } from "./validators/artistValidator";
-// album
-import { Album } from "./interfaces/album/album";
-import { AlbumBD } from "./interfaces/album/albumBD";
-import { isValidAlbum } from "./validators/albumValidator";
-// albumtracks
-import { AlbumTracks } from "./interfaces/albumTracks/albumTracks";
-import { AlbumTracksBD } from "./interfaces/albumTracks/albumTracksBD";
-import { isValidAlbumTracks } from "./validators/albumTracksValidator";
-// countries
-import { Country } from "./interfaces/country/country";
-import { CountryBD } from "./interfaces/country/countryBD";
-import { isValidCountry } from "./validators/countryValidator";
-// history
-import { History } from "./interfaces/history/history";
-import { HistoryBD } from "./interfaces/history/historyBD";
-import { isValidHistory } from "./validators/historyValidator";
-// playlist
-import { Playlist } from "./interfaces/playlist/playlist";
-import { PlaylistBD } from "./interfaces/playlist/playlistBD";
-import { isValidPlaylist } from "./validators/playlistValidator";
-// playlistTracks
-import { PlaylistTracks } from "./interfaces/playlistTracks/playlistTracks";
-import { PlaylistTracksBD } from "./interfaces/playlistTracks/playlistTrackBD";
-import { isValidPlaylistTracks } from "./validators/playlistTracksValidator";
-// user
-import { User } from "./interfaces/user/user";
-import { UserBD } from "./interfaces/user/userBD";
-import { isValidUser } from "./validators/userValidator";
 
 const port: number = 3000;
 
