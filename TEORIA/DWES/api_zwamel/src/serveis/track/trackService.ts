@@ -1,5 +1,6 @@
 import { tracks } from "../../data/track/track";
-import { TrackInvalidData } from "../../interfaces/error/trackInvalidData";
+import { SuccesService } from "../../interfaces/error/succesService";
+import { ErrorService } from "../../interfaces/error/errorService";
 import { Track } from "../../interfaces/track/track";
 import { TrackBD } from "../../interfaces/track/trackBD";
 import { isValidTrack } from "../../validators/track.Validator";
@@ -13,10 +14,10 @@ export function getTrackById(idTrack: string): TrackBD | undefined {
     return tracks.find((t: TrackBD) => { return t.id === idTrack});
 }
 
-export function createTrack(track:Track):TrackBD | TrackInvalidData {
+export function createTrack(track:Track):SuccesService<TrackBD> | ErrorService {
     
         if (!isValidTrack(track)) {
-            return { error: 400, message: "Invalid data"};
+            return {success: false, code: 400, message: "Invalid data"};
         };
     
         const uuid:string = randomUUID();
@@ -31,5 +32,5 @@ export function createTrack(track:Track):TrackBD | TrackInvalidData {
         //important: fer push
         tracks.push(trackRecord);
 
-        return trackRecord;
+        return { success: true, data: trackRecord };
 }

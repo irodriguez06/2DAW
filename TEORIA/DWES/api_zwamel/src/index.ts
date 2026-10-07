@@ -11,7 +11,8 @@ import { artists } from "./data/track/artist/artist";
 import { ArtistBD } from "./interfaces/artist/artistBD";
 import { isValidArtist } from "./validators/artistValidator";
 import { createTrack, getAllTracks, getTrackById } from "./serveis/track/trackService";
-import { TrackInvalidData } from "./interfaces/error/trackInvalidData";
+import { ErrorService } from "./interfaces/error/errorService";
+import { SuccesService } from "./interfaces/error/succesService";
 
 const port: number = 3000;
 
@@ -59,10 +60,10 @@ app.get("/artists/:id", (req: Request, res: Response) => {
 
 app.post("/tracks", (req: Request, res: Response) => {
 
-    const result:SuccesService | ErrorService = createTrack(req.body);
+    const result: SuccesService<TrackBD> | ErrorService = createTrack(req.body);
 
-    if () {
-        return res.status(400).json({ message: "Invalid data"});
+    if (!result.success) {
+        return res.status(result.error).json({ message: result.message });
     }
 
     return res.status(201).json();
