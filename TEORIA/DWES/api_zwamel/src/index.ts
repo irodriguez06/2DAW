@@ -10,6 +10,8 @@ import { isValidTrack } from "./validators/track.Validator";
 import { artists } from "./data/track/artist/artist";
 import { ArtistBD } from "./interfaces/artist/artistBD";
 import { isValidArtist } from "./validators/artistValidator";
+import { createTrack, getAllTracks, getTrackById } from "./serveis/track/trackService";
+import { TrackInvalidData } from "./interfaces/error/trackInvalidData";
 
 const port: number = 3000;
 
@@ -23,7 +25,7 @@ app.get("/", (_req: Request, res: Response) => { // _req → petició rebuda per
 });
 
 app.get("/tracks", (_req: Request, res: Response) => {
-    return res.status(200).json(tracks);
+    return res.status(200).json(getAllTracks());
 });
 
 app.get("/artists", (_req: Request, res: Response) => {
@@ -33,8 +35,7 @@ app.get("/artists", (_req: Request, res: Response) => {
 // get de id
 
 app.get("/tracks/:id", (req: Request, res: Response) => {
-    const idTrack: string = req.params.id as string;
-    const findTrack: TrackBD | undefined = tracks.find((t: TrackBD) => t.id === idTrack);
+    const findTrack: TrackBD | undefined = getTrackById(req.params.id as string);
 
     if (!findTrack) {
         return res.status(404).json({message: `Track not found`});
@@ -57,23 +58,14 @@ app.get("/artists/:id", (req: Request, res: Response) => {
 // posts
 
 app.post("/tracks", (req: Request, res: Response) => {
-    const track:Track = req.body;
-    if (!isValidTrack(track)) {
+
+    const result:SuccesService | ErrorService = createTrack(req.body);
+
+    if () {
         return res.status(400).json({ message: "Invalid data"});
-    };
+    }
 
-    const uuid:string = randomUUID();
-
-    const trackRecord: TrackBD = {
-        id: uuid,
-        title: track.title.trim().replace("/\s+/g", " "),
-        artist: track.artist.trim().replace("/\s+/g", " "),
-        duration: track.duration,
-    };
-
-    //important: fer push
-    tracks.push(trackRecord);
-    return res.status(201).json(track);
+    return res.status(201).json();
 });
 
 app.post("/artists", (req: Request, res: Response) => {
