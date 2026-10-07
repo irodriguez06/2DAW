@@ -72,42 +72,33 @@ app.post("/tracks", (req: Request, res: Response) => {
     return res.status(result.code).json(result);
 });
 
-app.post("/artists", (req: Request, res: Response) => {
-    const artist: ArtistBD = req.body;
-    if (!isValidArtist(artist)) {
-        return res.status(400).json({ message: "Invalid data"});
-    };
-
-    const uuid:string = randomUUID();
-
-    const artistRecord: ArtistBD = {
-        id: uuid,
-        nom: artist.nom.trim().replace("/\s+/g", " "),
-        alias: artist.alias.trim().replace("/\s+/g", " "),
-        pais: artist.pais.trim().replace("/\s+/g", " "),
-    };
-
-    //important: fer push
-    artists.push(artistRecord);
-    return res.status(201).json(artist);
-});
-
-// puts
-app.put('/tracks/:id', (req: Request, res: Response) => {
-
-    const idTrack: string = req.params.id as string;
-    const result: UpdateSuccessService<TrackBD> | ErrorService = updateTrack(idTrack, req.body);
-
+app.post("/tracks", (req: Request, res: Response) => {
+ 
+    const result: CreateSuccessService<TrackBD> | ErrorService = createTrack(req.body);
+ 
     if (!result.success) {
         const ErrorResult = result as ErrorService;
         return res.status(result.code).json({ message: ErrorResult.message });
     }
+ 
+    tracks.push((result as CreateSuccessService<TrackBD>).data);
+    return res.status(result.code).json(result);
+});
 
-    const trackRecord: TrackBD = (result as UpdateSuccessService<TrackBD>).data;
-    const index: number = tracks.findIndex((t: TrackBD) => t.id === idTrack);
-
-    tracks[index] = trackRecord;
-
+// puts
+app.put('/tracks/:id', (req: Request, res: Response) => {
+ 
+    const idTrack: string = req.params.id as string;
+    const result: UpdateSuccessService<TrackBD> | ErrorService = updateTrack(idTrack, req.body);
+ 
+    if (!result.success) {
+        const ErrorResult = result as ErrorService;
+        return res.status(result.code).json({ message: ErrorResult.message });
+    }
+ 
+    const successResult = result as UpdateSuccessService<TrackBD>;
+    tracks[successResult.index] = successResult.data;
+ 
     return res.status(result.code).json(result);
 });
 
