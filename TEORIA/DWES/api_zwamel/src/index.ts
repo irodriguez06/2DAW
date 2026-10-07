@@ -63,10 +63,11 @@ app.post("/tracks", (req: Request, res: Response) => {
     const result: SuccesService<TrackBD> | ErrorService = createTrack(req.body);
 
     if (!result.success) {
-        return res.status(result.error).json({ message: result.message });
+        const ErrorResult = result as ErrorService;
+        return res.status(result.code).json({ message: ErrorResult.message });
     }
 
-    return res.status(201).json();
+    return res.status(result.code).json(result);
 });
 
 app.post("/artists", (req: Request, res: Response) => {
