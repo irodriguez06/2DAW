@@ -51,7 +51,5 @@ export function updateTrack(idTrack: string, track: Track): UpdateSuccessService
         duration: track.duration,
     };
  
-    tracks[index] = trackRecord;
- 
     return { success: true, code: 200, data: trackRecord };
 }

@@ -103,6 +103,11 @@ app.put('/tracks/:id', (req: Request, res: Response) => {
         return res.status(result.code).json({ message: ErrorResult.message });
     }
 
+    const trackRecord: TrackBD = (result as UpdateSuccessService<TrackBD>).data;
+    const index: number = tracks.findIndex((t: TrackBD) => t.id === idTrack);
+
+    tracks[index] = trackRecord;
+
     return res.status(result.code).json(result);
 });
 
