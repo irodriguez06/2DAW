@@ -1,16 +1,13 @@
 import express, { Express, Request, Response } from "express";
 import { APICONFIG } from "./config/apiConfig";
-import { randomUUID } from "crypto";
 // track
 import { TrackBD } from "./interfaces/track/trackBD";
 import { tracks } from "./data/track/track";
-import { Track } from "./interfaces/track/track";
-import { isValidTrack } from "./validators/track.Validator";
 // artist
 import { artists } from "./data/track/artist/artist";
 import { ArtistBD } from "./interfaces/artist/artistBD";
-import { isValidArtist } from "./validators/artistValidator";
 import { createTrack, deleteTrack, getAllTracks, getTrackById, updateTrack } from "./serveis/track/trackService";
+import { createArtist, deleteArtist, getAllArtists, getArtistById, updateArtist } from "./serveis/track/artist/artistService";
 import { ErrorService } from "./interfaces/error/errorService";
 import { CreateSuccessService } from "./interfaces/error/createSuccessService";
 import { UpdateSuccessService } from "./interfaces/error/updateSuccessService";
@@ -32,7 +29,7 @@ app.get("/tracks", (_req: Request, res: Response) => {
 });
 
 app.get("/artists", (_req: Request, res: Response) => {
-    return res.status(200).json(artists);
+    return res.status(200).json(getAllArtists());
 });
 
 // get de id
@@ -47,13 +44,10 @@ app.get("/tracks/:id", (req: Request, res: Response) => {
 });
 
 app.get("/artists/:id", (req: Request, res: Response) => {
-    const idArtist: string = req.params.id as string;
-    const artist: ArtistBD[] = artists.filter(
-        (a: ArtistBD) => {return a.id === idArtist}
-    );
+    const artist: ArtistBD | undefined = getArtistById(req.params.id as string);
 
-    if (artist.length === 0) {
-        return res.status(404).json({message: `Artist ${idArtist} not found`});
+    if (!artist) {
+        return res.status(404).json({message: `Artist not found`});
     }
     return res.status(200).json(artist);
 });
@@ -86,6 +80,18 @@ app.post("/tracks", (req: Request, res: Response) => {
     return res.status(result.code).json(result);
 });
 
+app.post("/artists", (req: Request, res: Response) => {
+    const result: CreateSuccessService<ArtistBD> | ErrorService = createArtist(req.body);
+
+    if (!result.success) {
+        const errorResult = result as ErrorService;
+        return res.status(result.code).json({ message: errorResult.message });
+    }
+
+    artists.push((result as CreateSuccessService<ArtistBD>).data);
+    return res.status(result.code).json(result);
+});
+
 // puts
 app.put('/tracks/:id', (req: Request, res: Response) => {
     const result: UpdateSuccessService<TrackBD> | ErrorService = updateTrack(req.params.id as string, req.body);
@@ -101,6 +107,23 @@ app.put('/tracks/:id', (req: Request, res: Response) => {
     return res.status(result.code).json(result);
 });
 
+app.put("/artists/:id", (req: Request, res: Response) => {
+    const result: UpdateSuccessService<ArtistBD> | ErrorService = updateArtist(
+        req.params.id as string,
+        req.body,
+    );
+
+    if (!result.success) {
+        const errorResult = result as ErrorService;
+        return res.status(result.code).json({ message: errorResult.message });
+    }
+
+    const index: number = (result as UpdateSuccessService<ArtistBD>).index;
+    artists[index] = (result as UpdateSuccessService<ArtistBD>).data;
+
+    return res.status(result.code).json(result);
+});
+
 // delete
 app.delete('/tracks/:id', (req: Request, res: Response) => {
     const result: DeleteSuccessService | ErrorService = deleteTrack(req.params.id as string);
@@ -112,6 +135,20 @@ app.delete('/tracks/:id', (req: Request, res: Response) => {
 
     const index: number = (result as DeleteSuccessService).index;
     tracks.splice(index, 1);
+
+    return res.status(result.code).json(result);
+});
+
+app.delete("/artists/:id", (req: Request, res: Response) => {
+    const result: DeleteSuccessService | ErrorService = deleteArtist(req.params.id as string);
+
+    if (!result.success) {
+        const errorResult = result as ErrorService;
+        return res.status(result.code).json({ message: errorResult.message });
+    }
+
+    const index: number = (result as DeleteSuccessService).index;
+    artists.splice(index, 1);
 
     return res.status(result.code).json(result);
 });
