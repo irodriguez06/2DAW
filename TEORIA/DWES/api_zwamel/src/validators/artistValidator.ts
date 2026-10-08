@@ -1,6 +1,6 @@
 import { Artist } from "../interfaces/artist/artist";
 import { MAXPSEUDONYM, MAXREALNAME } from "../interfaces/artist/artist.constants";
-import { VALID_COUNTRIES } from "../data/track/countries/countries";
+import { countries } from "../data/track/countries/countries";
 
 export function isValidArtist(artist: Artist): boolean {
 
@@ -16,7 +16,7 @@ export function isValidArtist(artist: Artist): boolean {
     if (realName.length === 0 || realName.length > MAXREALNAME) { return false; }
 
     // el país ha d'existir exactament a la llista de països vàlids
-    if (!VALID_COUNTRIES.includes(country)) { return false; }
+    if (!countries.some((validCountry) => validCountry.name === country)) { return false; }
 
     return true;
 }

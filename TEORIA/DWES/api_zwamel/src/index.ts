@@ -12,6 +12,9 @@ import { ErrorService } from "./interfaces/error/errorService";
 import { CreateSuccessService } from "./interfaces/error/createSuccessService";
 import { UpdateSuccessService } from "./interfaces/error/updateSuccessService";
 import { DeleteSuccessService } from "./interfaces/error/deleteSuccessService";
+import { CountryBD } from "./interfaces/country/countryBD";
+import { countries } from "./data/track/countries/countries";
+import { createCountry, getAllCountries, getCountryById, updateCountry } from "./serveis/track/country/countryService";
 
 const port: number = 3000;
 
@@ -32,6 +35,10 @@ app.get("/artists", (_req: Request, res: Response) => {
     return res.status(200).json(getAllArtists());
 });
 
+app.get("/countries", (_req: Request, res: Response) => {
+    return res.status(200).json(getAllCountries());
+});
+
 // get de id
 
 app.get("/tracks/:id", (req: Request, res: Response) => {
@@ -50,6 +57,15 @@ app.get("/artists/:id", (req: Request, res: Response) => {
         return res.status(404).json({message: `Artist not found`});
     }
     return res.status(200).json(artist);
+});
+
+app.get("/countries/:id", (req: Request, res: Response) => {
+    const country: CountryBD | undefined = getCountryById(req.params.id as string);
+
+    if (!country) {
+        return res.status(404).json({ message: "Country not found" });
+    }
+    return res.status(200).json(country);
 });
 
 // posts
@@ -92,6 +108,18 @@ app.post("/artists", (req: Request, res: Response) => {
     return res.status(result.code).json(result);
 });
 
+app.post("/countries", (req: Request, res: Response) => {
+    const result: CreateSuccessService<CountryBD> | ErrorService = createCountry(req.body);
+
+    if (!result.success) {
+        const errorResult = result as ErrorService;
+        return res.status(result.code).json({ message: errorResult.message });
+    }
+
+    countries.push((result as CreateSuccessService<CountryBD>).data);
+    return res.status(result.code).json(result);
+});
+
 // puts
 app.put('/tracks/:id', (req: Request, res: Response) => {
     const result: UpdateSuccessService<TrackBD> | ErrorService = updateTrack(req.params.id as string, req.body);
@@ -120,6 +148,23 @@ app.put("/artists/:id", (req: Request, res: Response) => {
 
     const index: number = (result as UpdateSuccessService<ArtistBD>).index;
     artists[index] = (result as UpdateSuccessService<ArtistBD>).data;
+
+    return res.status(result.code).json(result);
+});
+
+app.put("/countries/:id", (req: Request, res: Response) => {
+    const result: UpdateSuccessService<CountryBD> | ErrorService = updateCountry(
+        req.params.id as string,
+        req.body,
+    );
+
+    if (!result.success) {
+        const errorResult = result as ErrorService;
+        return res.status(result.code).json({ message: errorResult.message });
+    }
+
+    const index: number = (result as UpdateSuccessService<CountryBD>).index;
+    countries[index] = (result as UpdateSuccessService<CountryBD>).data;
 
     return res.status(result.code).json(result);
 });
