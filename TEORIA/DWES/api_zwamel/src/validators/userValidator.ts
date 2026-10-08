@@ -4,7 +4,7 @@ import { countries } from "../data/track/countries/countries";
 
 export function isValidUser(user: User): boolean {
 
-    if (!user.email|| !user.country) {
+    if (!user || typeof user.email !== "string" || typeof user.country !== "string") {
         return false;
     }
 
