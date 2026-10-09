@@ -18,7 +18,7 @@ import { createCountry, getAllCountries, getCountryById, updateCountry } from ".
 import { UserBD } from "./interfaces/user/userBD";
 import { users } from "./data/track/user/user";
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from "./serveis/track/user/userService";
-import { getAllTracksController, getTrackByIdController, postTrackController } from "./controllers/tracksController";
+import { getAllTracksController, getTrackByIdController, postTrackController, putTrackController } from "./controllers/tracksController";
 
 const port: number = 3000;
 
@@ -83,20 +83,7 @@ app.get("/users/:id", (req: Request, res: Response) => {
 // posts
 
 app.post("/tracks", (req: Request, res: Response) => {
-    return postTrackController(req, res); 
-});
-
-app.post("/tracks", (req: Request, res: Response) => {
- 
-    const result: CreateSuccessService<TrackBD> | ErrorService = createTrack(req.body);
- 
-    if (!result.success) {
-        const ErrorResult = result as ErrorService;
-        return res.status(result.code).json({ message: ErrorResult.message });
-    }
- 
-    tracks.push((result as CreateSuccessService<TrackBD>).data);
-    return res.status(result.code).json(result);
+    return postTrackController(req, res);
 });
 
 app.post("/artists", (req: Request, res: Response) => {
@@ -137,18 +124,9 @@ app.post("/users", (req: Request, res: Response) => {
 
 // puts
 app.put('/tracks/:id', (req: Request, res: Response) => {
-    const result: UpdateSuccessService<TrackBD> | ErrorService = updateTrack(req.params.id as string, req.body);
- 
-    if (!result.success) {
-        const ErrorResult = result as ErrorService;
-        return res.status(result.code).json({ message: ErrorResult.message });
-    }
- 
-    const index:number = (result as UpdateSuccessService<TrackBD>).index;
-    tracks[index] = (result as UpdateSuccessService<TrackBD>)['data'];
- 
-    return res.status(result.code).json(result);
+    return putTrackController(req, res);
 });
+    
 
 app.put("/artists/:id", (req: Request, res: Response) => {
     const result: UpdateSuccessService<ArtistBD> | ErrorService = updateArtist(
