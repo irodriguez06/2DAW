@@ -27,42 +27,21 @@ app.get("/", (_req: Request, res: Response) => { // _req → petició rebuda per
 // track
 
 app.use("/tracks", trackRouter);
-
-app.get("/tracks", (_req: Request, res: Response) => {
-    return getAllTracksController(_req, res);
-});
-
 // artist
 
 app.use("/artist", artistRouter);
-
-app.get("/artists", (_req: Request, res: Response) => {
-    return getAllArtistController(_req, res);
-});
 
 // country
 
 app.use("/countries", countryRouter);
 
-app.get("/countries", (_req: Request, res: Response) => {
-    return getAllCountriesController(_req, res);
-}); 
-
 // user
 
 app.use("/users", userRouter);
 
-app.get("/users", (_req: Request, res: Response) => {
-    return getAllUsersController(_req, res);
-});
-
 // album
 
 app.use("/album", albumRouter);
-
-app.get("/albums", (_req: Request, res: Response) => {
-    return getAllAlbumsController(_req, res);
-});
 
 // listen
 
