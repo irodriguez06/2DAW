@@ -7,10 +7,9 @@ import { ErrorService } from "../interfaces/error/errorService";
 import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
 import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 
-export function getAllTracksController(req : Request, res : Response):Response {
+export function getAllTracksController(_req : Request, res : Response):Response {
     return res.status(200).json(getAllTracks());
 } 
-
 
 export function getTrackByIdController(req: Request, res: Response):Response {
     const findTrack: TrackBD | undefined = getTrackById(req.params.id as string);

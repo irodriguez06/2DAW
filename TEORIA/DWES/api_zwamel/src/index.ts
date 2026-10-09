@@ -35,7 +35,7 @@ app.get("/", (_req: Request, res: Response) => { // _req → petició rebuda per
 app.use("/tracks", trackRouter);
 
 app.get("/tracks", (_req: Request, res: Response) => {
-    return getAllTracksController(res);
+    return getAllTracksController(_req, res);
 });
 
 app.get("/artists", (_req: Request, res: Response) => {
