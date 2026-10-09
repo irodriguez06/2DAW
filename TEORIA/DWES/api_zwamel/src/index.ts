@@ -18,7 +18,7 @@ import { createCountry, getAllCountries, getCountryById, updateCountry } from ".
 import { UserBD } from "./interfaces/user/userBD";
 import { users } from "./data/track/user/user";
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from "./serveis/track/user/userService";
-import { getAllTracksController, getTrackByIdController } from "./controllers/tracksController";
+import { getAllTracksController, getTrackByIdController, postTrackController } from "./controllers/tracksController";
 
 const port: number = 3000;
 
@@ -83,16 +83,7 @@ app.get("/users/:id", (req: Request, res: Response) => {
 // posts
 
 app.post("/tracks", (req: Request, res: Response) => {
-
-    const result: CreateSuccessService<TrackBD> | ErrorService = createTrack(req.body);
-
-    if (!result.success) {
-        const ErrorResult = result as ErrorService;
-        return res.status(result.code).json({ message: ErrorResult.message });
-    }
-
-    tracks.push((result as CreateSuccessService<TrackBD>).data);
-    return res.status(result.code).json(result);
+    return postTrackController(req, res); 
 });
 
 app.post("/tracks", (req: Request, res: Response) => {
