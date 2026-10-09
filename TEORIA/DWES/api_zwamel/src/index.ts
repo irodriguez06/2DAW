@@ -10,13 +10,8 @@ import { getAllCountriesController } from "./controllers/countriesController";
 import { countryRouter } from "./routes/countryRoutes";
 import { getAllUsersController } from "./controllers/usersController";
 import { userRouter } from "./routes/userRoutes";
-import { AlbumBD } from "./interfaces/album/albumBD";
-import { albums } from "./data/track/albums/albums";
-import { createAlbum, deleteAlbum, getAllAlbums, getAlbumById, updateAlbum } from "./serveis/track/album/albumService";
-import { CreateSuccessService } from "./interfaces/error/createSuccessService";
-import { ErrorService } from "./interfaces/error/errorService";
-import { UpdateSuccessService } from "./interfaces/error/updateSuccessService";
-import { DeleteSuccessService } from "./interfaces/error/deleteSuccessService";
+import { getAllAlbumsController } from "./controllers/albumController";
+import { albumRouter } from "./routes/albumRoutes";
 
 const port: number = 3000;
 
@@ -63,58 +58,10 @@ app.get("/users", (_req: Request, res: Response) => {
 
 // album
 
+app.use("/album", albumRouter);
+
 app.get("/albums", (_req: Request, res: Response) => {
-    return res.status(200).json(getAllAlbums());
-});
-
-app.get("/albums/:id", (req: Request, res: Response) => {
-    const album: AlbumBD | undefined = getAlbumById(req.params.id as string);
-
-    if (!album) {
-        return res.status(404).json({ message: "Album not found" });
-    }
-    return res.status(200).json(album);
-});
-
-app.post("/albums", (req: Request, res: Response) => {
-    const result: CreateSuccessService<AlbumBD> | ErrorService = createAlbum(req.body);
-
-    if (!result.success) {
-        const errorResult = result as ErrorService;
-        return res.status(result.code).json({ message: errorResult.message });
-    }
-
-    albums.push((result as CreateSuccessService<AlbumBD>).data);
-    return res.status(result.code).json(result);
-});
-
-app.put("/albums/:id", (req: Request, res: Response) => {
-    const result: UpdateSuccessService<AlbumBD> | ErrorService = updateAlbum(
-        req.params.id as string,
-        req.body,
-    );
-
-    if (!result.success) {
-        const errorResult = result as ErrorService;
-        return res.status(result.code).json({ message: errorResult.message });
-    }
-
-    const index: number = (result as UpdateSuccessService<AlbumBD>).index;
-    albums[index] = (result as UpdateSuccessService<AlbumBD>).data;
-    return res.status(result.code).json(result);
-});
-
-app.delete("/albums/:id", (req: Request, res: Response) => {
-    const result: DeleteSuccessService | ErrorService = deleteAlbum(req.params.id as string);
-
-    if (!result.success) {
-        const errorResult = result as ErrorService;
-        return res.status(result.code).json({ message: errorResult.message });
-    }
-
-    const index: number = (result as DeleteSuccessService).index;
-    albums.splice(index, 1);
-    return res.status(result.code).json(result);
+    return getAllAlbumsController(_req, res);
 });
 
 // listen
