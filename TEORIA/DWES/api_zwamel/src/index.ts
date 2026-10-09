@@ -22,6 +22,8 @@ import { deleteTrackController, getAllTracksController, getTrackByIdController, 
 import { trackRouter } from "./routes/trackRoutes";
 import { getAllArtistController, getArtistByIdController, postArtistController, putArtistController } from "./controllers/artistsController";
 import { artistRouter } from "./routes/artistRoutes";
+import { getAllCountriesController, getCountriesByIdController, postCountryController, putCountryController } from "./controllers/countriesController";
+import { countryRouter } from "./routes/countryRoutes";
 
 const port: number = 3000;
 
@@ -46,32 +48,23 @@ app.get("/artists", (_req: Request, res: Response) => {
     return getAllArtistController(_req, res);
 });
 
-
-
-
-
-
+app.use("/countries", countryRouter);
 
 app.get("/countries", (_req: Request, res: Response) => {
-    return res.status(200).json(getAllCountries());
-});
+    return getAllCountriesController(_req, res);
+}); 
+
+
+
+
+
+
 
 app.get("/users", (_req: Request, res: Response) => {
     return res.status(200).json(getAllUsers());
 });
 
 // get de id
-
-
-
-app.get("/countries/:id", (req: Request, res: Response) => {
-    const country: CountryBD | undefined = getCountryById(req.params.id as string);
-
-    if (!country) {
-        return res.status(404).json({ message: "Country not found" });
-    }
-    return res.status(200).json(country);
-});
 
 app.get("/users/:id", (req: Request, res: Response) => {
     const user: UserBD | undefined = getUserById(req.params.id as string);
@@ -86,17 +79,8 @@ app.get("/users/:id", (req: Request, res: Response) => {
 
 
 
-app.post("/countries", (req: Request, res: Response) => {
-    const result: CreateSuccessService<CountryBD> | ErrorService = createCountry(req.body);
 
-    if (!result.success) {
-        const errorResult = result as ErrorService;
-        return res.status(result.code).json({ message: errorResult.message });
-    }
-
-    countries.push((result as CreateSuccessService<CountryBD>).data);
-    return res.status(result.code).json(result);
-});
+    
 
 app.post("/users", (req: Request, res: Response) => {
     const result: CreateSuccessService<UserBD> | ErrorService = createUser(req.body);
@@ -114,22 +98,7 @@ app.post("/users", (req: Request, res: Response) => {
 
 
 
-app.put("/countries/:id", (req: Request, res: Response) => {
-    const result: UpdateSuccessService<CountryBD> | ErrorService = updateCountry(
-        req.params.id as string,
-        req.body,
-    );
 
-    if (!result.success) {
-        const errorResult = result as ErrorService;
-        return res.status(result.code).json({ message: errorResult.message });
-    }
-
-    const index: number = (result as UpdateSuccessService<CountryBD>).index;
-    countries[index] = (result as UpdateSuccessService<CountryBD>).data;
-
-    return res.status(result.code).json(result);
-});
 
 app.put("/users/:id", (req: Request, res: Response) => {
     const result: UpdateSuccessService<UserBD> | ErrorService = updateUser(
