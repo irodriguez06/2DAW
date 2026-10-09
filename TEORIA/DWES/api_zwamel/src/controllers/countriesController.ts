@@ -2,7 +2,6 @@ import { Response, Request } from "express";
 import { CreateSuccessService } from "../interfaces/error/createSuccessService";
 import { ErrorService } from "../interfaces/error/errorService";
 import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
-import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 import { createCountry, getAllCountries, getCountryById, updateCountry } from "../serveis/track/country/countryService";
 import { CountryBD } from "../interfaces/country/countryBD";
 import { countries } from "../data/track/countries/countries";
