@@ -18,7 +18,7 @@ import { createCountry, getAllCountries, getCountryById, updateCountry } from ".
 import { UserBD } from "./interfaces/user/userBD";
 import { users } from "./data/track/user/user";
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from "./serveis/track/user/userService";
-import { getAllTracksController, getTrackByIdController, postTrackController, putTrackController } from "./controllers/tracksController";
+import { deleteTrackController, getAllTracksController, getTrackByIdController, postTrackController, putTrackController } from "./controllers/tracksController";
 
 const port: number = 3000;
 
@@ -181,17 +181,7 @@ app.put("/users/:id", (req: Request, res: Response) => {
 
 // delete
 app.delete('/tracks/:id', (req: Request, res: Response) => {
-    const result: DeleteSuccessService | ErrorService = deleteTrack(req.params.id as string);
-
-    if (!result.success) {
-        const ErrorResult = result as ErrorService;
-        return res.status(result.code).json({ message: ErrorResult.message });
-    }
-
-    const index: number = (result as DeleteSuccessService).index;
-    tracks.splice(index, 1);
-
-    return res.status(result.code).json(result);
+    return deleteTrackController(req, res);
 });
 
 app.delete("/artists/:id", (req: Request, res: Response) => {
