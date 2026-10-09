@@ -18,7 +18,7 @@ import { createCountry, getAllCountries, getCountryById, updateCountry } from ".
 import { UserBD } from "./interfaces/user/userBD";
 import { users } from "./data/track/user/user";
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from "./serveis/track/user/userService";
-import { getAllTracksController } from "./controllers/tracksController";
+import { getAllTracksController, getTrackByIdController } from "./controllers/tracksController";
 
 const port: number = 3000;
 
@@ -50,12 +50,7 @@ app.get("/users", (_req: Request, res: Response) => {
 // get de id
 
 app.get("/tracks/:id", (req: Request, res: Response) => {
-    const findTrack: TrackBD | undefined = getTrackById(req.params.id as string);
-
-    if (!findTrack) {
-        return res.status(404).json({message: `Track not found`});
-    }
-    return res.status(200).json(findTrack);
+    return getTrackByIdController(req, res);
 });
 
 app.get("/artists/:id", (req: Request, res: Response) => {
