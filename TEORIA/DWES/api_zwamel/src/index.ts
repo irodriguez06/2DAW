@@ -18,6 +18,7 @@ import { createCountry, getAllCountries, getCountryById, updateCountry } from ".
 import { UserBD } from "./interfaces/user/userBD";
 import { users } from "./data/track/user/user";
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from "./serveis/track/user/userService";
+import { getAllTracksController } from "./controllers/tracksController";
 
 const port: number = 3000;
 
@@ -31,7 +32,7 @@ app.get("/", (_req: Request, res: Response) => { // _req → petició rebuda per
 });
 
 app.get("/tracks", (_req: Request, res: Response) => {
-    return res.status(200).json(getAllTracks());
+    return getAllTracksController(res);
 });
 
 app.get("/artists", (_req: Request, res: Response) => {
