@@ -19,6 +19,7 @@ import { UserBD } from "./interfaces/user/userBD";
 import { users } from "./data/track/user/user";
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from "./serveis/track/user/userService";
 import { deleteTrackController, getAllTracksController, getTrackByIdController, postTrackController, putTrackController } from "./controllers/tracksController";
+import { trackRouter } from "./routes/trackRoutes";
 
 const port: number = 3000;
 
@@ -30,6 +31,8 @@ app.use(express.json());
 app.get("/", (_req: Request, res: Response) => { // _req → petició rebuda però no utilitzada
     return res.status(200).json(JSON.stringify(APICONFIG));
 });
+
+app.use("/tracks", trackRouter);
 
 app.get("/tracks", (_req: Request, res: Response) => {
     return getAllTracksController(res);
@@ -48,10 +51,6 @@ app.get("/users", (_req: Request, res: Response) => {
 });
 
 // get de id
-
-app.get("/tracks/:id", (req: Request, res: Response) => {
-    return getTrackByIdController(req, res);
-});
 
 app.get("/artists/:id", (req: Request, res: Response) => {
     const artist: ArtistBD | undefined = getArtistById(req.params.id as string);
@@ -81,10 +80,6 @@ app.get("/users/:id", (req: Request, res: Response) => {
 });
 
 // posts
-
-app.post("/tracks", (req: Request, res: Response) => {
-    return postTrackController(req, res);
-});
 
 app.post("/artists", (req: Request, res: Response) => {
     const result: CreateSuccessService<ArtistBD> | ErrorService = createArtist(req.body);
@@ -123,10 +118,6 @@ app.post("/users", (req: Request, res: Response) => {
 });
 
 // puts
-app.put('/tracks/:id', (req: Request, res: Response) => {
-    return putTrackController(req, res);
-});
-    
 
 app.put("/artists/:id", (req: Request, res: Response) => {
     const result: UpdateSuccessService<ArtistBD> | ErrorService = updateArtist(
@@ -180,9 +171,6 @@ app.put("/users/:id", (req: Request, res: Response) => {
 });
 
 // delete
-app.delete('/tracks/:id', (req: Request, res: Response) => {
-    return deleteTrackController(req, res);
-});
 
 app.delete("/artists/:id", (req: Request, res: Response) => {
     const result: DeleteSuccessService | ErrorService = deleteArtist(req.params.id as string);
