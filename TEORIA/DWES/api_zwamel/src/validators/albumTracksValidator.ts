@@ -1,16 +1,16 @@
 import { AlbumTracks } from "../interfaces/albumTracks/albumTracks";
-import { MAXALBUMTRACKSNAME } from "../interfaces/albumTracks/albumTracks.constants";
-    
-export function isValidAlbumTracks(albumTracks: AlbumTracks): boolean {
 
-    if (!albumTracks.album|| !albumTracks.track) {
+export function isValidAlbumTracks(albumTracks: AlbumTracks): boolean {
+    if (
+        !albumTracks
+        || typeof albumTracks.album !== "string"
+        || typeof albumTracks.track !== "string"
+    ) {
         return false;
     }
 
     const album: string = albumTracks.album.trim();
     const track: string = albumTracks.track.trim();
 
-    if (album.length === 0 || album.length > MAXALBUMTRACKSNAME) { return false; }
-
-    return true;
+    return album.length > 0 && track.length > 0;
 }
