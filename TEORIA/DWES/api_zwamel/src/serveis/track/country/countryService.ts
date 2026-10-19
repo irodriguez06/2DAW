@@ -1,50 +1,34 @@
-import { randomUUID } from "crypto";
-import { countries } from "../../../data/track/countries/countries";
-import { Country } from "../../../interfaces/country/country";
+import { ConnectionPool, IResult } from "mssql";
+import sql from "mssql";
+import { getConnection } from "../../../config/database";
 import { CountryBD } from "../../../interfaces/country/countryBD";
-import { CreateSuccessService } from "../../../interfaces/error/createSuccessService";
 import { ErrorService } from "../../../interfaces/error/errorService";
-import { UpdateSuccessService } from "../../../interfaces/error/updateSuccessService";
-import { isValidCountry } from "../../../validators/countryValidator";
+import { SelectSuccessService } from "../../../interfaces/error/selectSuccessService";
 
-export function getAllCountries(): CountryBD[] {
-    return countries;
+export async function getAllCountries(): Promise<CountryBD[]> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+
+    const queryText: string = "SELECT id, name FROM Country";
+
+    const result: IResult<CountryBD> = await request.query(queryText);
+    return result.recordset;
 }
 
-export function getCountryById(idCountry: string): CountryBD | undefined {
-    return countries.find((country: CountryBD) => country.id === idCountry);
-}
-
-export function createCountry(country: Country): CreateSuccessService<CountryBD> | ErrorService {
-    if (!isValidCountry(country)) {
-        return { success: false, code: 400, message: "Invalid data" };
-    }
-
-    const countryRecord: CountryBD = {
-        id: randomUUID(),
-        name: country.name.trim().replace(/\s+/g, " "),
-    };
-
-    return { success: true, code: 201, data: countryRecord };
-}
-
-export function updateCountry(
+export async function getCountryById(
     idCountry: string,
-    country: Country,
-): UpdateSuccessService<CountryBD> | ErrorService {
-    if (!isValidCountry(country)) {
-        return { success: false, code: 400, message: "Invalid data" };
+): Promise<SelectSuccessService<CountryBD> | ErrorService> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+
+    const queryText: string = "SELECT id, name FROM Country WHERE id = @id";
+    request.input("id", sql.UniqueIdentifier, idCountry);
+
+    const result: IResult<CountryBD> = await request.query(queryText);
+
+    if (result.recordset.length === 0) {
+        return { success: false, code: 404, message: "Country not found" };
     }
 
-    const index: number = countries.findIndex((existingCountry: CountryBD) => existingCountry.id === idCountry);
-    if (index === -1) {
-        return { success: false, code: 404, message: `Country ${idCountry} not found` };
-    }
-
-    const countryRecord: CountryBD = {
-        id: idCountry,
-        name: country.name.trim().replace(/\s+/g, " "),
-    };
-
-    return { success: true, code: 200, data: countryRecord, index };
+    return { success: true, code: 200, data: result.recordset[0] };
 }
