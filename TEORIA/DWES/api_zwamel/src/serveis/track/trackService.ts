@@ -1,60 +1,102 @@
 import { randomUUID } from "crypto";
 import { tracks } from "../../data/track/track";
-import { CreateSuccessService } from "../../interfaces/error/createSuccessService";
-import { DeleteSuccessService } from "../../interfaces/error/deleteSuccessService";
-import { ErrorService } from "../../interfaces/error/errorService";
-import { UpdateSuccessService } from "../../interfaces/error/updateSuccessService";
 import { Track } from "../../interfaces/track/track";
 import { TrackBD } from "../../interfaces/track/trackBD";
 import { isValidTrack } from "../../validators/track.Validator";
+import { ErrorService } from "../../interfaces/error/errorService";
+import { CreateSuccessService } from "../../interfaces/error/createSuccessService";
+import { UpdateSuccessService } from "../../interfaces/error/updateSuccessService";
+import { DeleteSuccessService } from "../../interfaces/error/deleteSuccessService";
+import { ConnectionPool, IResult } from "mssql";
+import sql from "mssql";
+import { getConnection } from "../../config/database";
+import { SelectSuccessService } from "../../interfaces/error/selectSuccessService";
 
-export function getAllTracks(): TrackBD[] {
-    return tracks;
+export async function getAllTracks(): Promise<TrackBD[]> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+
+    const queryText: string = `Select * from Track`;
+
+    const result: IResult<TrackBD> = await request.query(queryText);
+    return result.recordset;
 }
 
-export function getTrackById(idTrack: string): TrackBD | undefined {
-    return tracks.find((track: TrackBD) => track.id === idTrack);
+export async function getTrackById(idTrack: string): Promise<SelectSuccessService<TrackBD> | ErrorService> {
+
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+
+    const queryText: string = `Select * from Track Where Track.id = @id`;
+    request.input("id", sql.UniqueIdentifier, idTrack);
+
+    const result: IResult<TrackBD> = await request.query(queryText);
+
+    if (result.recordset.length === 0) {
+        return {
+            success: false,
+            code: 404,
+            message: "Track not found"
+        }
+    }
+    return {
+        success: true,
+        code: 200,
+        data: result.recordset[0]
+    }
 }
 
-export function createTrack(track: Track): CreateSuccessService<TrackBD> | ErrorService {
+export async function createTrack(track: Track): Promise<CreateSuccessService<TrackBD> | ErrorService> {
     if (!isValidTrack(track)) {
         return { success: false, code: 400, message: "Invalid data" };
     }
 
     const title:string = track.title.trim().replace(/\s+/g, " ");
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
 
-    return { success: true, code: 201, data: trackRecord };
+    const queryText: string = `INSERT INTO TRACK(title,artist_id,duration)
+    VALUES(@title,@artist_id,@duration)
+    `;
+
+    request.input("title",sql.NVarChar,title);
+    request.input("artist_id",sql.UniqueIdentifier,track.artist);
+    request.input("duration",sql.Numeric,track.duration);
+
+    const result: IResult<TrackBD> = await request.query(queryText);
+    console.log(result);
+
+    //return { success: true, code: 201, data: trackRecord };
+    return { success: false, code: 400, message: "Invalid data" };
 }
 
-export function putTrackById(
-    track: Track,
-    idTrack: string,
-): UpdateSuccessService<TrackBD> | ErrorService {
+export function putTrackById(track: Track, idTrack: string): UpdateSuccessService<TrackBD> | ErrorService {
     if (!isValidTrack(track)) {
         return { success: false, code: 400, message: "Invalid data" };
     }
 
-    const index: number = tracks.findIndex((existingTrack: TrackBD) => existingTrack.id === idTrack);
+    const index: number = tracks.findIndex((t: TrackBD) => { return t.id === idTrack; });
     if (index === -1) {
-        return { success: false, code: 404, message: `Track ${idTrack} not found` };
+        return { success: false, code: 404, message: "Track not found" };
     }
 
-    const trackRecord: TrackBD = {
+    const updatedTrack: TrackBD = {
         id: idTrack,
         title: track.title.trim().replace(/\s+/g, " "),
         artist: track.artist.trim().replace(/\s+/g, " "),
-        duration: track.duration,
+        duration: track.duration
     };
 
-    return { success: true, code: 200, data: trackRecord, index };
+    return { success: true, code: 200, index: index, data: updatedTrack };
 }
 
 export function deleteTrack(idTrack: string): DeleteSuccessService | ErrorService {
-    const index: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
 
-    if (index === -1) {
-        return { success: false, code: 404, message: `Track ${idTrack} not found` };
+    const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
+
+    if (trackIndex === -1) {
+        return { success: false, code: 404, message: "Track not found" };
     }
 
-    return { success: true, code: 204, index };
+    return { success: true, code: 204, index: trackIndex };
 }
