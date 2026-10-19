@@ -4,6 +4,9 @@ import { getConnection } from "../../../config/database";
 import { ArtistBD } from "../../../interfaces/artist/artistBD";
 import { ErrorService } from "../../../interfaces/error/errorService";
 import { SelectSuccessService } from "../../../interfaces/error/selectSuccessService";
+import { Artist } from "../../../interfaces/artist/artist";
+import { CreateSuccessService } from "../../../interfaces/error/createSuccessService";
+import { isValidArtist } from "../../../validators/artistValidator";
 
 
 export async function getAllArtists(): Promise<ArtistBD[]> {
@@ -41,4 +44,30 @@ export async function getArtistById(idArtist: string,): Promise<SelectSuccessSer
     }
 
     return { success: true, code: 200, data: result.recordset[0] };
+}
+
+export async function createArtist(artist: Artist,): Promise<CreateSuccessService<number> | ErrorService> {
+
+    if (!isValidArtist(artist)) {
+        return { success: false, code: 400, message: "Invalid data" };
+    }
+
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    request.input("name", sql.NVarChar(150), artist.nom.trim().replace(/\s+/g, " "));
+    request.input("pseudonym", sql.NVarChar(150), artist.alias.trim().replace(/\s+/g, " "));
+    request.input("country", sql.NVarChar(100), artist.pais.trim());
+
+    const result: IResult<ArtistBD> = await request.query(`
+        INSERT INTO Artist (name, pseudonym, country_id)
+        SELECT @name, @pseudonym, Country.id
+        FROM Country
+        WHERE Country.name = @country
+    `);
+
+    if (result.rowsAffected[0] === 0) {
+        return { success: false, code: 404, message: `Country ${artist.pais.trim()} not found` };
+    }
+
+    return { success: true, code: 201, data: result.rowsAffected[0] };
 }
