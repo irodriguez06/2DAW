@@ -69,24 +69,36 @@ export async function createTrack(track: Track): Promise<CreateSuccessService<nu
     return { success: true, code: 201, data: result.rowsAffected[0] };
 }
 
-export function putTrackById(track: Track, idTrack: string): UpdateSuccessService<TrackBD> | ErrorService {
+export async function updateTrack(track: Track, idTrack: string): Promise<UpdateSuccessService<number> | ErrorService> {
     if (!isValidTrack(track)) {
         return { success: false, code: 400, message: "Invalid data" };
     }
 
-    const index: number = tracks.findIndex((t: TrackBD) => { return t.id === idTrack; });
-    if (index === -1) {
-        return { success: false, code: 404, message: "Track not found" };
+    const title:string = track.title.trim().replace(/\s+/g, " ");
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+
+    const queryText: string = `UPDATE TRACK SET
+        title=@title,artist_id=@artist_id,duration=@duration
+        where track.id=@id
+    `;
+
+    request.input("title",sql.NVarChar,title);
+    request.input("artist_id",sql.UniqueIdentifier,track.artist);
+    request.input("duration",sql.Numeric,track.duration);
+    request.input("id", sql.UniqueIdentifier, idTrack);
+
+    const result: IResult<number> = await request.query(queryText);
+    
+    if (result.rowsAffected[0] === 0) {
+        return {
+            success: false,
+            code: 404,
+            message: "Track not found",
+        }
     }
 
-    const updatedTrack: TrackBD = {
-        id: idTrack,
-        title: track.title.trim().replace(/\s+/g, " "),
-        artist: track.artist.trim().replace(/\s+/g, " "),
-        duration: track.duration
-    };
-
-    return { success: true, code: 200, index: index, data: updatedTrack };
+    return { success: true, code: 201, data: result.rowsAffected[0] };
 }
 
 export function deleteTrack(idTrack: string): DeleteSuccessService | ErrorService {

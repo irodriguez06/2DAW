@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { createTrack, deleteTrack, getAllTracks, getTrackById, putTrackById } from "../serveis/track/trackService";
+import { createTrack, deleteTrack, getAllTracks, getTrackById, updateTrack} from "../serveis/track/trackService";
 import { TrackBD } from "../interfaces/track/trackBD";
 import { CreateSuccessService } from "../interfaces/error/createSuccessService";
 import { ErrorService } from "../interfaces/error/errorService";
@@ -34,17 +34,13 @@ export async function postTrackController(req: Request, res: Response): Promise<
     return res.status(result.code).json(result);
 }
 
-
-export function putTrackController(req: Request, res: Response): Response {
-    const result: UpdateSuccessService<TrackBD> | ErrorService = putTrackById(req.body, req.params.id as string);
+export async function putTrackController(req: Request, res: Response): Promise<Response> {
+    const result: UpdateSuccessService<number> | ErrorService = await updateTrack (req.body, req.params.id as string);
 
     if (!result.success) {
         const errorResult = result as ErrorService;
         return res.status(errorResult.code).json({ message: errorResult.message });
     }
-
-    const index: number = (result as UpdateSuccessService<TrackBD>).index;
-    tracks[index] = (result as UpdateSuccessService<TrackBD>).data;
 
     return res.status(result.code).json(result);
 }
