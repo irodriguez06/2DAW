@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { createTrack, deleteTrack, getAllTracks, getTrackById, updateTrack } from "../serveis/track/trackService";
+import { createTrack, deleteTrack, getAllTracks, getTrackById, putTrackById } from "../serveis/track/trackService";
 import { TrackBD } from "../interfaces/track/trackBD";
 import { CreateSuccessService } from "../interfaces/error/createSuccessService";
 import { ErrorService } from "../interfaces/error/errorService";
@@ -38,10 +38,7 @@ export function postTrackController(req: Request, res: Response): Response {
 
 
 export function putTrackController(req: Request, res: Response): Response {
-    const result: UpdateSuccessService<TrackBD> | ErrorService = updateTrack(
-        req.params.id as string,
-        req.body,
-    );
+    const result: UpdateSuccessService<TrackBD> | ErrorService = putTrackById(req.body, req.params.id as string);
 
     if (!result.success) {
         const errorResult = result as ErrorService;

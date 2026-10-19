@@ -1,7 +1,7 @@
 {
-  "name": "api_zwamel",
+  "name": "spotify-api",
   "version": "1.0.0",
-  "description": "API de l'Isaac",
+  "description": "",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,11 +14,14 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "dotenv": "^18.0.8",
     "express": "^5.2.1",
-    "uuid": "^14.0.2"
+    "mssql": "^12.7.9"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/mssql": "^12.3.0",
+    "@types/node": "^22.20.3",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2"
   }

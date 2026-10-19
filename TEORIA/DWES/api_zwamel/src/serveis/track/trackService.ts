@@ -7,7 +7,6 @@ import { UpdateSuccessService } from "../../interfaces/error/updateSuccessServic
 import { Track } from "../../interfaces/track/track";
 import { TrackBD } from "../../interfaces/track/trackBD";
 import { isValidTrack } from "../../validators/track.Validator";
-import { ConnectionOptions } from "tls";
 
 export function getAllTracks(): TrackBD[] {
     return tracks;
@@ -32,9 +31,9 @@ export function createTrack(track: Track): CreateSuccessService<TrackBD> | Error
     return { success: true, code: 201, data: trackRecord };
 }
 
-export function updateTrack(
-    idTrack: string,
+export function putTrackById(
     track: Track,
+    idTrack: string,
 ): UpdateSuccessService<TrackBD> | ErrorService {
     if (!isValidTrack(track)) {
         return { success: false, code: 400, message: "Invalid data" };
