@@ -8,6 +8,7 @@ import { Artist } from "../../../interfaces/artist/artist";
 import { CreateSuccessService } from "../../../interfaces/error/createSuccessService";
 import { isValidArtist } from "../../../validators/artistValidator";
 import { UpdateSuccessService } from "../../../interfaces/error/updateSuccessService";
+import { DeleteSuccessService } from "../../../interfaces/error/deleteSuccessService";
 
 
 export async function getAllArtists(): Promise<ArtistBD[]> {
@@ -116,4 +117,20 @@ export async function updateArtist(idArtist: string, artist: Artist,): Promise<U
     }
 
     return { success: true, code: 200, data: result.rowsAffected[0] };
+}
+
+export async function deleteArtist(idArtist: string): Promise<DeleteSuccessService | ErrorService> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    request.input("id", sql.UniqueIdentifier, idArtist);
+
+    const result: IResult<ArtistBD> = await request.query(
+        "DELETE FROM Artist WHERE Artist.id = @id",
+    );
+
+    if (result.rowsAffected[0] === 0) {
+        return { success: false, code: 404, message: "Artist not found" };
+    }
+
+    return { success: true, code: 204 };
 }
