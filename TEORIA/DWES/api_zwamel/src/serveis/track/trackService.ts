@@ -101,13 +101,25 @@ export async function updateTrack(track: Track, idTrack: string): Promise<Update
     return { success: true, code: 201, data: result.rowsAffected[0] };
 }
 
-export function deleteTrack(idTrack: string): DeleteSuccessService | ErrorService {
+export async function deleteTrack(idTrack: string): Promise<DeleteSuccessService | ErrorService> {
 
-    const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
 
-    if (trackIndex === -1) {
-        return { success: false, code: 404, message: "Track not found" };
+    const queryText: string = `Delete from Track Where Track.id = @id`;
+    request.input("id", sql.UniqueIdentifier, idTrack);
+
+    const result: IResult<TrackBD> = await request.query(queryText);
+
+    if (result.rowsAffected[0] === 0) {
+        return {
+            success: false,
+            code: 404,
+            message: "Track not found"
+        }
     }
-
-    return { success: true, code: 204, index: trackIndex };
+    return {
+        success: true,
+        code: 200,
+    }
 }
