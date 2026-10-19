@@ -21,12 +21,7 @@ export function createTrack(track: Track): CreateSuccessService<TrackBD> | Error
         return { success: false, code: 400, message: "Invalid data" };
     }
 
-    const trackRecord: TrackBD = {
-        id: randomUUID(),
-        title: track.title.trim().replace(/\s+/g, " "),
-        artist: track.artist.trim().replace(/\s+/g, " "),
-        duration: track.duration,
-    };
+    const title:string = track.title.trim().replace(/\s+/g, " ");
 
     return { success: true, code: 201, data: trackRecord };
 }
