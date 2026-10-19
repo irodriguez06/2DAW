@@ -46,7 +46,7 @@ export async function getTrackById(idTrack: string): Promise<SelectSuccessServic
     }
 }
 
-export async function createTrack(track: Track): Promise<CreateSuccessService<TrackBD> | ErrorService> {
+export async function createTrack(track: Track): Promise<CreateSuccessService<number> | ErrorService> {
     if (!isValidTrack(track)) {
         return { success: false, code: 400, message: "Invalid data" };
     }
@@ -63,11 +63,10 @@ export async function createTrack(track: Track): Promise<CreateSuccessService<Tr
     request.input("artist_id",sql.UniqueIdentifier,track.artist);
     request.input("duration",sql.Numeric,track.duration);
 
-    const result: IResult<TrackBD> = await request.query(queryText);
+    const result: IResult<number> = await request.query(queryText);
     console.log(result);
 
-    //return { success: true, code: 201, data: trackRecord };
-    return { success: false, code: 400, message: "Invalid data" };
+    return { success: true, code: 201, data: result.rowsAffected[0] };
 }
 
 export function putTrackById(track: Track, idTrack: string): UpdateSuccessService<TrackBD> | ErrorService {

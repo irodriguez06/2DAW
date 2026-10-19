@@ -31,10 +31,7 @@ export async function postTrackController(req: Request, res: Response): Promise<
         return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-
-    tracks.push((result as CreateSuccessService<TrackBD>).data);
     return res.status(result.code).json(result);
-
 }
 
 
