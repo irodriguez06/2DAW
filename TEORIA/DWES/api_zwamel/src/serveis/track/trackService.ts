@@ -7,6 +7,7 @@ import { UpdateSuccessService } from "../../interfaces/error/updateSuccessServic
 import { Track } from "../../interfaces/track/track";
 import { TrackBD } from "../../interfaces/track/trackBD";
 import { isValidTrack } from "../../validators/track.Validator";
+import { ConnectionOptions } from "tls";
 
 export function getAllTracks(): TrackBD[] {
     return tracks;
