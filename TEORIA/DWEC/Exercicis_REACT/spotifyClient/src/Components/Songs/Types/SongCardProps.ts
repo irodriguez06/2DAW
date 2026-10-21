@@ -1,5 +1,5 @@
-import type { Track } from "../../../Model/Track";
+import type { TrackView } from "./TrackView";
 
 export interface SongCardProps {
-    trackInfo: Track;
+    trackInfo: TrackView;
 }
