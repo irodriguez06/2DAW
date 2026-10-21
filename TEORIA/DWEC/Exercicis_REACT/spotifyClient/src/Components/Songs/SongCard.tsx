@@ -4,9 +4,9 @@ import type { SongCardProps } from "./Types/SongCardProps";
 const SongCard = (props:SongCardProps) => {
     return (
         <>
-            <h1>{props.title}</h1>
-            <p>{props.artist}</p>
-            <p>{props.duration}</p>
+            <h1>{props.trackInfo.title}</h1>
+            <p>{props.trackInfo.artist}</p>
+            <p>{props.trackInfo.duration}</p>
         </>
     )
 }
