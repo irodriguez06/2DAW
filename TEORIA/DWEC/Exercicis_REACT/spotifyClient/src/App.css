@@ -1,0 +1,15 @@
+.page-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.page-header h1,
+.user-info p {
+  margin: 0;
+}
+
+.user-info {
+  text-align: right;
+}
