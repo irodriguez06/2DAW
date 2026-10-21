@@ -1,18 +1,20 @@
 import './App.css'
 import SongCard from './Components/Songs/SongCard'
 import { tracks } from './Data/track';
-import type { Track } from './Model/Track';
+import type { TrackView } from './Components/Songs/Types/TrackView';
 
+const totalTracks:number = tracks.length;
+const random:number = Math.floor(Math.random() * totalTracks);
+const totalReproduccions:TrackView = {
+  ...tracks[random],
+  reproduccions: Math.floor(Math.random() * 1_000)
+};
 
 function App() {
 
-  const totalTracks:number = tracks.length;
-  const random:number = Math.floor(Math.random() * totalTracks);
-  const track:Track = tracks[random];
-
   return (
     <>
-      <SongCard trackInfo={track}/>
+      <SongCard trackInfo={totalReproduccions}/>
     </>
   )
 }

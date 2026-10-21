@@ -7,6 +7,7 @@ const SongCard = ({trackInfo}:SongCardProps) => {
             <h1>{trackInfo.title}</h1>
             <p>{trackInfo.artist}</p>
             <p>{trackInfo.duration}</p>
+            <p>Reproduccions: {trackInfo.reproduccions}</p>
         </>
     )
 }

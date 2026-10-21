@@ -1,5 +1,5 @@
-export interface TrackView {
-    title: string;
-    artist: string;
-    duration: number;
+import type { Track } from "../../../Model/Track";
+
+export interface TrackView extends Track {
+    reproduccions: number;
 }
