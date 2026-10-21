@@ -1,5 +1,5 @@
+import type { Track } from "../../../Model/Track";
+
 export interface SongCardProps {
-    title: string;
-    artist: string;
-    duration: number;
+    trackInfo: Track;
 }
