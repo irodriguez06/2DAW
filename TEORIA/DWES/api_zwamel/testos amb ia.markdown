@@ -65,4 +65,4 @@ Segons el resum final de Copilot:
 
 ## Conclusions del treball
 
-- 
+- En principi semblaria que la IA fa els testos més importants per a la api, pero es pot deixar coses o fer-ne d'altres de malament. Per això es important que manualment es revisin els tests i es pensin en probabilitats d'altres casos que la IA hagi no pogut tenir en compte.
