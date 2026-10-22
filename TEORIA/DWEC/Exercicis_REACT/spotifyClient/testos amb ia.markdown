@@ -12,6 +12,7 @@ Documentar les proves del client React de Spotify a partir del codi que ja hi ha
 
 - Hi ha sis proves a `tests/components.test.mjs`.
 - Les proves carreguen els components i les dades amb Vite i comproven el seu HTML renderitzat amb React.
+- Les comprovacions dels components se centren en les dades rebudes per propietats o generades per l'aplicació; no validen contingut fix com el títol «Spotify Client».
 - Es proven la capçalera, la targeta de cançó, les dades de cançons i el renderitzat de `App`.
 - No s'ha modificat el codi de l'aplicació per fer aquesta comprovació.
 
@@ -23,12 +24,12 @@ Documentar les proves del client React de Spotify a partir del codi que ja hi ha
 
 ## Què comprova cada prova
 
-1. **La capçalera mostra el títol, l'usuari i la data.** Comprova que aparegui «Spotify Client», el nom passat com a propietat i una data amb el format esperat.
+1. **La capçalera mostra l'usuari rebut i la data generada.** Comprova que el nom passat com a propietat es representi correctament i que hi hagi una data amb el format esperat.
 2. **La capçalera permet un nom d'usuari buit.** Comprova que el component es pugui renderitzar quan `user.name` és una cadena buida.
 3. **La targeta mostra les dades de la cançó.** Comprova el títol, l'artista, la durada i les reproduccions.
 4. **La targeta representa zero reproduccions.** Evita que el valor `0` desaparegui o es mostri incorrectament.
 5. **Les dades de cançons tenen els camps esperats.** Comprova que hi hagi cançons, que títol i artista no siguin buits i que les durades siguin nombres finits i positius.
-6. **`App` renderitza dades disponibles.** Comprova que hi aparegui un dels noms d'usuari definits, una cançó de les dades i un nombre de reproduccions entre 0 i 999.
+6. **`App` renderitza dades disponibles.** Comprova que hi aparegui un nom d'usuari generat, una cançó de les dades i un nombre de reproduccions entre 0 i 999.
 
 ## Límits de les proves
 
