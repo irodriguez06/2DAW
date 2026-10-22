@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "tsx --test tests/api.test.ts",
+    "test": "tsx --test src/tests/api.test.ts",
     "dev": "tsx src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js"

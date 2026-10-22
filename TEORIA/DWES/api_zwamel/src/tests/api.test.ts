@@ -1,15 +1,15 @@
 import assert from "node:assert/strict";
 import { after, before, beforeEach, describe, it } from "node:test";
-import { app } from "../src/app";
-import { albums } from "../src/data/track/albums/albums";
-import { albumTracks } from "../src/data/track/albumTracks/albumTracks";
-import { artists } from "../src/data/track/artist/artist";
-import { history } from "../src/data/track/history/history";
-import { playlists } from "../src/data/track/playlist/playlist";
-import { playlistTracks } from "../src/data/track/playlistTracks/playlistTracks";
-import { tracks } from "../src/data/track/track";
-import { users } from "../src/data/track/user/user";
-import { APICONFIG } from "../src/config/apiConfig";
+import { app } from "../app";
+import { albums } from "../data/track/albums/albums";
+import { albumTracks } from "../data/track/albumTracks/albumTracks";
+import { artists } from "../data/track/artist/artist";
+import { history } from "../data/track/history/history";
+import { playlists } from "../data/track/playlist/playlist";
+import { playlistTracks } from "../data/track/playlistTracks/playlistTracks";
+import { tracks } from "../data/track/track";
+import { users } from "../data/track/user/user";
+import { APICONFIG } from "../config/apiConfig";
 
 const artistId = "artist-test";
 const userId = "user-test";

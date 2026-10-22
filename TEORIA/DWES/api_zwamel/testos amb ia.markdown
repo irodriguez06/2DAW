@@ -54,6 +54,10 @@ Segons el resum final de Copilot:
 - crea i consulta l'historial, rebutjant usuaris, pistes i dates incorrectes --> trobat linea 185
 - gestiona les relacions playlist-pista i àlbum-pista --> trobat linea 222
 
+## Moure la carpeta de tests a src i provar d'executar-la
+
+- Al moure la carpeta de tests a src i tornar a executar npm test, acaba donant els mateixos resultats de tests, tot correcte i 6 proves diferents.
+
 ## Quins errors s'han trobat
 
 - Compilació TypeScript: npm run build falla per errors de tipus. Cal identificar-los i comprovar si afecten el funcionament de l'API.
