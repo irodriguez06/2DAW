@@ -23,7 +23,7 @@ Segons el resum final de Copilot:
 - `npm test`: correcte, amb **6 proves superades i cap error**.
 - `npm run build`: falla per errors de tipus que ja existien al codi de l'aplicació. No s'han corregit perquè no formaven part de l'encàrrec.
 - Les operacions correctes que depenen de SQL no s'han provat contra una base de dades.
-- Al executar npm test he pogut veure que efectivament els tests fets per la IA han sigut correctes.
+- Al executar `npm test` manualment he pogut veure que efectivament els tests fets per la IA han sigut correctes.
 
 ## Resultat comunicat amb "npm test"
 
@@ -44,8 +44,21 @@ Segons el resum final de Copilot:
 > ℹ todo 0
 > ℹ duration_ms 877.1131
 
-## Passos pendents
+## Comparacions entre els missatges de les proves i el que es pot trobar al codi fet a api.test
 
-1. Revisar les proves amb més detall després del commit.
-2. Comparar les proves de React amb les proves del servidor i analitzar si falta algun cas o si hi ha algun comportament que no s'hagi cobert.
-3. Si cal, afegir o ajustar proves. No completar el codi de l'aplicació dins d'aquesta feina.
+- API HTTP --> linea 43, l'estructura general dels tests es fer un describe amb varis it a dintre, per poder fer proves unitaries
+- retorna la configuració i les col·leccions inicials --> trobat a la linea 79
+- rebutja dades invàlides als recursos connectats a la base de dades --> trobat linea 91
+- crea i consulta l'historial, rebutjant usuaris, pistes i dates incorrectes --> trobat linea 110
+- gestiona els àlbums amb referències d'artista vàlides --> trobat linea 143
+- crea i consulta l'historial, rebutjant usuaris, pistes i dates incorrectes --> trobat linea 185
+- gestiona les relacions playlist-pista i àlbum-pista --> trobat linea 222
+
+## Quins errors s'han trobat
+
+- Compilació TypeScript: npm run build falla per errors de tipus. Cal identificar-los i comprovar si afecten el funcionament de l'API.
+- La carpeta de tests està creada a la carpeta arrel de api_zwamel, quan en realitat hauria d'estar dintre la carpeta de src. Axiò es degut a que els testos con com controls de qualitat i a la cuina (arrel) hi han les receptes (npm tipus), si fiquem aquests controls de qualitat al jardí (arrel) i no a la cuina (src) no trobarem les receptes per poder saber com fer-ho.
+
+## Conclusions del treball
+
+- 
