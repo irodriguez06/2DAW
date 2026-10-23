@@ -18,7 +18,7 @@ const SongCard = ({trackInfo}:SongCardProps) => {
             <p>{trackInfo.duration}</p>
             <p>Reproduccions: {totalReproduccions}</p>
 
-            <p><button onClick={handleClickPlay}>Play</button></p>
+            <p><button onClick={() => handleClickPlay}>Play</button></p>
         </>
     )
 }
