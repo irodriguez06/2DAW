@@ -14,7 +14,8 @@ const totalTracks:number = tracks.length;
 const random:number = Math.floor(Math.random() * totalTracks);
 const totalReproduccions:TrackView = {
   ...tracks[random],
-  reproduccions: Math.floor(Math.random() * 1_000)
+  reproduccions: Math.floor(Math.random() * 1_000),
+  likes: Math.floor(Math.random() * 20)
 };
 
 function App() {
