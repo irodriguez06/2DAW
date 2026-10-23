@@ -8,14 +8,21 @@ const SongCard = ({trackInfo}:SongCardProps) => {
 
     const [totalReproduccions,setTotalReproduccions] = useState<number>(trackInfo.reproduccions);
     const [totalLikes,setTotalLikes] = useState<number>(trackInfo.likes);
-    const estaLiked = totalLikes > trackInfo.likes;
+    const [likesBase,setLikesBase] = useState<number>(trackInfo.likes);
+    const estaLiked = totalLikes > likesBase;
 
     function handleClickPlay() {
         setTotalReproduccions((prev:number) => prev + 1);
     }
 
     function handleClickLike() {
-        setTotalLikes((prev:number) => prev === trackInfo.likes ? prev + 1 : trackInfo.likes);
+        setTotalLikes((prev:number) => prev === likesBase ? prev + 1 : likesBase);
+    }
+
+    function handleClickReset() {
+        setTotalReproduccions(0);
+        setTotalLikes(0);
+        setLikesBase(0);
     }
 
     return (
@@ -29,6 +36,7 @@ const SongCard = ({trackInfo}:SongCardProps) => {
                 <img src={estaLiked ? likedIcon : unlikedIcon} width={20} height={20}/>
             </button></p>
             <p><button type="button" onClick={handleClickPlay}>Play</button></p>
+            <p><button type="button" onClick={handleClickReset}>Reiniciar</button></p>
         </>
     )
 }
