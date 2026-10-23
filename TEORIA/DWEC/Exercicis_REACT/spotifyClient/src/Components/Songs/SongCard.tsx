@@ -35,11 +35,10 @@ const SongCard = ({trackInfo}:SongCardProps) => {
             <p><button type="button" onClick={handleClickLike}>
                 <img src={estaLiked ? likedIcon : unlikedIcon} width={20} height={20}/>
             </button></p>
-            <p>
-                <button type="button" onClick={() => handleClickPlay(1)}>Play 1</button>
-                <button type="button" onClick={() => handleClickPlay(5)}>Play 5</button>
-                <button type="button" onClick={() => handleClickPlay(10)}>Play 10</button>
-            </p>
+            <p><button type="button" onClick={() => handleClickPlay(1)}>Play 1</button></p>
+            <p><button type="button" onClick={() => handleClickPlay(5)}>Play 5</button></p>
+            <p><button type="button" onClick={() => handleClickPlay(10)}>Play 10</button></p>
+            
             <p><button type="button" onClick={handleClickReset}>Reiniciar</button></p>
         </>
     )
