@@ -24,6 +24,7 @@ function App() {
     <main>
       <Header user={randomUser} />
       <SongCard trackInfo={totalReproduccions}/>
+      <p><button type="button" onClick={handleClickRandom}>Random</button></p>
     </main>
   )
 }
