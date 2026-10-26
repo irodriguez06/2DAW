@@ -12,37 +12,40 @@ const randomUser: User = {
 };
 
 function App() {
-  const [currentTrackIndex, setCurrentTrackIndex] = useState<number>( 
-    () => Math.floor(Math.random() * tracks.length)
+
+  const [track, setTrack] = useState<TrackView>(
+    {
+      ...tracks[Math.floor(Math.random() * tracks.length)],
+      reproduccions: Math.floor(Math.random() * 1000),
+      likes: Math.floor(Math.random() * 1000)
+    }
   );
-  const [reproduccions] = useState<number>(() => Math.floor(Math.random() * 1_000));
-  const [likes] = useState<number>(() => Math.floor(Math.random() * 20));
 
-  function handleClickRandom() {
-    setCurrentTrackIndex((currentIndex) => {
-      const otherTrackIndexes = tracks
-        .map((_, index) => index)
-        .filter((index) => index !== currentIndex);
-
-      if (otherTrackIndexes.length === 0) {
-        return currentIndex;
+  function incrementarReproduccions() {
+    const tr = (prev: TrackView): TrackView => {
+      return {
+        ...prev,
+        "reproduccions": prev.reproduccions + 1,
       }
-
-      const randomIndex = Math.floor(Math.random() * otherTrackIndexes.length);
-      return otherTrackIndexes[randomIndex];
-    });
+    }
+    setTrack(tr);
   }
 
-  const trackInfo: TrackView = {
-    ...tracks[currentTrackIndex],
-    reproduccions,
-    likes
+  function handleClickRandom() {
+    const tr = (prev: TrackView): TrackView => {
+      return {
+        ...tracks[Math.floor(Math.random() * tracks.length)],
+        "reproduccions": Math.floor(Math.random() * 1000),
+        "likes": Math.floor(Math.random() * 1000)
+      }
+    }
+    setTrack(tr);
   };
 
   return (
     <main>
       <Header user={randomUser} />
-      <SongCard trackInfo={trackInfo}/>
+      <SongCard trackInfo={track} />
       <p><button type="button" onClick={handleClickRandom}>RandomTrack</button></p>
     </main>
   )
