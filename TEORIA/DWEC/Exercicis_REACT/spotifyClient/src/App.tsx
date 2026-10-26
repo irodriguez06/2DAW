@@ -42,11 +42,21 @@ function App() {
     setTrack(tr);
   };
 
+  function gestionarLikes() {
+    const tr = (prev: TrackView): TrackView => {
+      return {
+        ...prev,
+        likes: 
+      }
+    }
+    setTrack(tr);
+  }
+
   return (
     <main>
       <Header user={randomUser} />
       <p><button type="button" onClick={handleClickRandom}>RandomTrack</button></p>
-      <SongCard trackInfo={track} play={() => incrementarReproduccions()} />
+      <SongCard trackInfo={track} play={() => incrementarReproduccions()} like={() => gestionarLikes()}/>
     </main>
   )
 }

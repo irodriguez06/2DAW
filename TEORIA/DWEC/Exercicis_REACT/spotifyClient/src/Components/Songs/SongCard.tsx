@@ -19,7 +19,7 @@ const SongCard = (props:SongCardProps) => {
     }
 
     function handleClickReset() {
-
+        props.like();
     }
 
     return (
