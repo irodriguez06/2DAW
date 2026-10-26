@@ -4,14 +4,14 @@ import likedIcon from "../../assets/silike.png";
 import unlikedIcon from "../../assets/nolike.png";
 
 
-const SongCard = ({ trackInfo }: SongCardProps) => {
+const SongCard = (props:SongCardProps) => {
 
-    const [totalLikes, setTotalLikes] = useState<number>(trackInfo.likes);
-    const [likesBase, setLikesBase] = useState<number>(trackInfo.likes);
+    const [totalLikes, setTotalLikes] = useState<number>(props.trackInfo.likes);
+    const [likesBase, setLikesBase] = useState<number>(props.trackInfo.likes);
     const estaLiked = totalLikes > likesBase;
 
     function handleClickPlay() {
-
+        props.play();
     }
 
     function handleClickLike() {
@@ -24,10 +24,10 @@ const SongCard = ({ trackInfo }: SongCardProps) => {
 
     return (
         <>
-            <h1>{trackInfo.title}</h1>
-            <p>{trackInfo.artist}</p>
-            <p>{trackInfo.duration}</p>
-            <p>Reproduccions: {trackInfo.reproduccions}</p>
+            <h1>{props.trackInfo.title}</h1>
+            <p>{props.trackInfo.artist}</p>
+            <p>{props.trackInfo.duration}</p>
+            <p>Reproduccions: {props.trackInfo.reproduccions}</p>
             <p>Likes: {totalLikes}</p>
             <p><button type="button" onClick={handleClickLike}>
                 <img src={estaLiked ? likedIcon : unlikedIcon} width={20} height={20} />

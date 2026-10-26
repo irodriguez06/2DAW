@@ -45,8 +45,8 @@ function App() {
   return (
     <main>
       <Header user={randomUser} />
-      <SongCard trackInfo={track} />
       <p><button type="button" onClick={handleClickRandom}>RandomTrack</button></p>
+      <SongCard trackInfo={track} play={() => incrementarReproduccions()} />
     </main>
   )
 }
