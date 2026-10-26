@@ -17,10 +17,10 @@ app.get("/", (_req: Request, res: Response) => {
     return res.json(JSON.stringify(APICONFIG));
 });
 
-app.use("/tracks", trackRouter);
-app.use("/artists", artistRouter);
-app.use("/countries", countryRouter);
-app.use("/users", userRouter);
+app.use("/tracks", trackRouter); // fet
+app.use("/artists", artistRouter); // fet
+app.use("/countries", countryRouter); // fet
+app.use("/users", userRouter); // fet
 app.use("/playlists", playlistRouter);
 app.use("/histories", historyRouter);
 app.use("/albums", albumRouter);
