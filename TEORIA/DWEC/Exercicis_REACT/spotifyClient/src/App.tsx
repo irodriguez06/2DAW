@@ -38,6 +38,7 @@ function App() {
   function handleClickRandom() {
     const tr = (prev: TrackView): TrackView => {
       return {
+        ...prev,
         ...tracks[Math.floor(Math.random() * tracks.length)],
         "reproduccions": Math.floor(Math.random() * 1000),
         "likes": {
