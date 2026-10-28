@@ -68,11 +68,25 @@ function App() {
     setTrack(tr);
   }
 
+  function resetejar() {
+    setTrack((prev) => ({
+      ...prev,
+
+        "likes": {
+          like: false,
+          totalLikes: 0
+        },
+        reproduccions: 0
+      }
+    )
+  )
+}
+
   return (
     <main>
       <Header user={randomUser} />
       <p><button type="button" onClick={handleClickRandom}>RandomTrack</button></p>
-      <SongCard trackInfo={track} play={() => incrementarReproduccions()} like={() => gestionarLikes()}/>
+      <SongCard trackInfo={track} play={() => incrementarReproduccions()} like={() => gestionarLikes()} reset={() => resetejar()}/>
     </main>
   )
 }

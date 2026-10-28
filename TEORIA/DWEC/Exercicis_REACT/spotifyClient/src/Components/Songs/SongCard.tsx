@@ -13,7 +13,7 @@ const SongCard = (props:SongCardProps) => {
     }
 
     function handleClickReset() {
-        
+        props.reset();
     }
 
     return (
@@ -28,7 +28,7 @@ const SongCard = (props:SongCardProps) => {
                 {props.trackInfo.likes.totalLikes}
             </p>
             <p><button type="button" onClick={() => handleClickPlay()}>Play</button></p>
-            <p><button type="button" onClick={handleClickReset}>Reiniciar</button></p>
+            <p><button type="button" onClick={() => handleClickReset()}>Reiniciar</button></p>
         </>
     )
 }
