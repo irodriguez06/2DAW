@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import './App.css'
-import Header from './Components/Header'
+import Header from './Components/Header/Header'
 import SongCard from './Components/Songs/SongCard'
 import { tracks } from './Data/track';
 import type { User } from './Model/User';
 import type { TrackView } from './Components/Songs/Types/TrackView';
 import type { Like } from './Components/Songs/Types/Like';
+import Reproduint from './Components/Reproduint/reproduint';
 
 const userNames: string[] = ['Isaac', 'Bernardinho', 'Ayoub i força al canut', 'Pedro Sanchez'];
 const randomUser: User = {
@@ -88,6 +89,7 @@ function App() {
       <Header user={randomUser} />
       <p><button type="button" onClick={handleClickRandom}>RandomTrack</button></p>
       <SongCard trackInfo={track} play={() => incrementarReproduccions()} like={() => gestionarLikes()} reset={() => resetejar()}/>
+      <Reproduint />
     </main>
   )
 }

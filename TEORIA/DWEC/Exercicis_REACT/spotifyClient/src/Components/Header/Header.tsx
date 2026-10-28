@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { User } from "../Model/User";
+import type { User } from "../../Model/User";
 
 interface HeaderProps {
     user: User;
