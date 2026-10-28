@@ -19,8 +19,8 @@ function App() {
       ...tracks[Math.floor(Math.random() * tracks.length)],
       reproduccions: Math.floor(Math.random() * 1000),
       "likes": {
-          like: true,
-          totalLikes: 180
+          like: false,
+          totalLikes: 0
         }
     }
   );
@@ -41,8 +41,8 @@ function App() {
         ...tracks[Math.floor(Math.random() * tracks.length)],
         "reproduccions": Math.floor(Math.random() * 1000),
         "likes": {
-          like: true,
-          totalLikes: 180
+          like: false,
+          totalLikes: 0
         }
       }
     }
