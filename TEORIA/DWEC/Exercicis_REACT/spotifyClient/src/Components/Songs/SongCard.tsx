@@ -6,10 +6,6 @@ import unlikedIcon from "../../assets/nolike.png";
 
 const SongCard = (props:SongCardProps) => {
 
-    const [totalLikes, setTotalLikes] = useState<number>(props.trackInfo.likes);
-    const [likesBase, setLikesBase] = useState<number>(props.trackInfo.likes);
-    const estaLiked = totalLikes > likesBase;
-
     function handleClickPlay() {
         props.play();
     }

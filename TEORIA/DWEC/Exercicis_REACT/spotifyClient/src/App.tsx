@@ -46,7 +46,10 @@ function App() {
     const tr = (prev: TrackView): TrackView => {
       return {
         ...prev,
-        likes: 
+        likes:{
+          like: false,
+          totalLikes: 0
+        }
       }
     }
     setTrack(tr);
