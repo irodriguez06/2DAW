@@ -1,0 +1,9 @@
+Introducció docker file
+  - Fitxer amb comandes per crear una imatge a docker
+  - Per posar comentaris fem servir #
+  - El fitxer comença sempre amb la instrucció FROM per definir una imatge base 
+  - Utilitza comandes en majúscules com
+      - COPY per afegir fitxers
+      - RUN per instal·lar paquets
+      - CMD per establir la comanda final que arrencarà el contenidor
+  - Un cop guardat, només cal executar docker build a la terminal per transformar aquestes instruccions en una imatge a punt per funcionar.
