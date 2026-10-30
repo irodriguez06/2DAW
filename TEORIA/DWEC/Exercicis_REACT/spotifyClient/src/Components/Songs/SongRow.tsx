@@ -1,14 +1,14 @@
-import type {SongRowProps } from "./Types/SongRowProps"
+import type { SongRowProps } from "./Types/SongRowProps"
 
-const SongRow = (props:SongRowProps) => {
+const SongRow = (props: SongRowProps) => {
 
     return (
-        <>
-            <h1>{props.title}</h1>
-            <p>{props.artist}</p>
-            <p>{props.duration}</p>
-        </>
-    )
+        <tr>
+            <td>{props.title}</td>
+            <td>{props.artist}</td>
+            <td>{props.duration}</td>
+        </tr>
+    );
 }
 
 export default SongRow;
