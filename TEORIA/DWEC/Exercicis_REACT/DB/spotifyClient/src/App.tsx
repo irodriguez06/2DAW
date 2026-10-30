@@ -2,12 +2,12 @@ import { useState } from 'react';
 import './App.css'
 import Header from './Components/Header/Header'
 import SongCard from './Components/Songs/SongCard'
-import { tracks } from './Data/track';
 import type { User } from './Model/User';
 import type { TrackView } from './Components/Songs/Types/TrackView';
 import type { Like } from './Components/Songs/Types/Like';
 import Reproduint from './Components/Reproduint/reproduint';
 import ListSongs from './Components/Songs/ListSongs';
+import type { Track } from './Model/Track';
 
 const userNames: string[] = ['Isaac', 'Bernardinho', 'Ayoub i força al canut', 'Pedro Sanchez'];
 const randomUser: User = {
@@ -15,6 +15,8 @@ const randomUser: User = {
 };
 
 function App() {
+
+  const [tracks, setTracks] = useState<Track[]>([]);
 
   const [track, setTrack] = useState<TrackView>(
     {
@@ -91,7 +93,9 @@ function App() {
       <p><button type="button" onClick={handleClickRandom}>RandomTrack</button></p>
       <SongCard trackInfo={track} play={() => incrementarReproduccions()} like={() => gestionarLikes()} reset={() => resetejar()}/>
       <Reproduint />
-      <table>
+    {
+      !tracks.length?
+        <table>
       <thead>
         <title>List Songs</title>
       </thead>
@@ -99,6 +103,8 @@ function App() {
         <ListSongs tracks={tracks} />
       </tbody>
     </table>
+    :<></>
+    };
     </main>
   )
 }
