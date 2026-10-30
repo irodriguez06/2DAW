@@ -105,9 +105,6 @@ function App() {
         }
       </tbody>
     </table>
-     <aside>
-     <SongCard trackInfo={track} play={() => incrementarReproduccions()} like={() => gestionarLikes()} reset={() => resetejar()}/>
-     </aside>
       <Header user={randomUser} />
       <p><button type="button" onClick={handleClickRandom}>RandomTrack</button></p>
       <SongCard trackInfo={track} play={() => incrementarReproduccions()} like={() => gestionarLikes()} reset={() => resetejar()}/>
