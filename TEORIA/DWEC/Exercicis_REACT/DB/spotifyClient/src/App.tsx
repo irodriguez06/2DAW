@@ -29,6 +29,12 @@ function App() {
     }
   );
 
+  async function carregarDadesTrack() {
+    const resposta: Response = await fetch("http://localhost:3000/tracks");
+    const listTrack:Track[] = await resposta.json() as Track[];
+    setTracks(listTrack)
+  }
+
   function incrementarReproduccions() {
     const tr = (prev: TrackView): TrackView => {
       return {
@@ -103,7 +109,10 @@ function App() {
         <ListSongs tracks={tracks} />
       </tbody>
     </table>
-    :<></>
+    :<><p>
+        <button onClick={carregarDadesTrack}>Carregar Tracks</button>
+      </p>
+      </>
     };
     </main>
   )
