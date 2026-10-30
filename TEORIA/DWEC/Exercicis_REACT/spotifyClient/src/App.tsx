@@ -97,6 +97,7 @@ function App() {
           tracks.map(
             (t:Track) => {
               return <SongRow
+                        key={t.id}
                         title={t.title}
                         artist={t.artist}
                         duration={t.duration} />
