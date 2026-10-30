@@ -7,8 +7,7 @@ import type { User } from './Model/User';
 import type { TrackView } from './Components/Songs/Types/TrackView';
 import type { Like } from './Components/Songs/Types/Like';
 import Reproduint from './Components/Reproduint/reproduint';
-import SongRow from './Components/Songs/SongRow';
-import type { Track } from './Model/Track';
+import ListSongs from './Components/Songs/ListSongs';
 
 const userNames: string[] = ['Isaac', 'Bernardinho', 'Ayoub i força al canut', 'Pedro Sanchez'];
 const randomUser: User = {
@@ -93,17 +92,7 @@ function App() {
         <title>List Songs</title>
       </thead>
       <tbody>
-        {
-          tracks.map(
-            (t:Track) => {
-              return <SongRow
-                        key={t.id}
-                        title={t.title}
-                        artist={t.artist}
-                        duration={t.duration} />
-            }
-          )
-        }
+        <ListSongs tracks={tracks} />
       </tbody>
     </table>
       <Header user={randomUser} />
