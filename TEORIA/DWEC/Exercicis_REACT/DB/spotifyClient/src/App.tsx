@@ -109,11 +109,10 @@ function App() {
         <ListSongs tracks={tracks} />
       </tbody>
     </table>
-    :<><p>
+    :<p>
         <button onClick={carregarDadesTrack}>Carregar Tracks</button>
       </p>
-      </>
-    };
+    }
     </main>
   )
 }
