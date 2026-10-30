@@ -7,6 +7,7 @@ import type { User } from './Model/User';
 import type { TrackView } from './Components/Songs/Types/TrackView';
 import type { Like } from './Components/Songs/Types/Like';
 import Reproduint from './Components/Reproduint/reproduint';
+import SongRow from './Components/Songs/SongRow';
 
 const userNames: string[] = ['Isaac', 'Bernardinho', 'Ayoub i força al canut', 'Pedro Sanchez'];
 const randomUser: User = {
@@ -86,6 +87,26 @@ function App() {
 
   return (
     <main>
+    <table>
+      <thead>
+        <title>List Songs</title>
+      </thead>
+      <tbody>
+        {
+          tracks.map(
+            (t:Track) => {
+              return <SongRow
+                        title={t.title}
+                        artist={t.artist}
+                        duration={t.duration} />
+            }
+          )
+        }
+      </tbody>
+    </table>
+    // <aside>
+    //   <SongCard trackInfo={track} play={() => incrementarReproduccions()} like={() => gestionarLikes()} reset={() => resetejar()}/> />
+    // </aside>
       <Header user={randomUser} />
       <p><button type="button" onClick={handleClickRandom}>RandomTrack</button></p>
       <SongCard trackInfo={track} play={() => incrementarReproduccions()} like={() => gestionarLikes()} reset={() => resetejar()}/>
