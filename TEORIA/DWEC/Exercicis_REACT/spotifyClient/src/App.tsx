@@ -87,7 +87,11 @@ function App() {
 
   return (
     <main>
-    <table>
+      <Header user={randomUser} />
+      <p><button type="button" onClick={handleClickRandom}>RandomTrack</button></p>
+      <SongCard trackInfo={track} play={() => incrementarReproduccions()} like={() => gestionarLikes()} reset={() => resetejar()}/>
+      <Reproduint />
+      <table>
       <thead>
         <title>List Songs</title>
       </thead>
@@ -95,10 +99,6 @@ function App() {
         <ListSongs tracks={tracks} />
       </tbody>
     </table>
-      <Header user={randomUser} />
-      <p><button type="button" onClick={handleClickRandom}>RandomTrack</button></p>
-      <SongCard trackInfo={track} play={() => incrementarReproduccions()} like={() => gestionarLikes()} reset={() => resetejar()}/>
-      <Reproduint />
     </main>
   )
 }
