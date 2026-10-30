@@ -100,7 +100,7 @@ function App() {
       <SongCard trackInfo={track} play={() => incrementarReproduccions()} like={() => gestionarLikes()} reset={() => resetejar()}/>
       <Reproduint />
     {
-      !tracks.length?
+      tracks.length>0?
         <table>
       <thead>
         <title>List Songs</title>
