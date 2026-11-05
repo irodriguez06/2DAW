@@ -1,6 +1,7 @@
 import type { SongCardProps } from "./Types/SongCardProps";
 import likedIcon from "../../assets/silike.png";
 import unlikedIcon from "../../assets/nolike.png";
+import formatDuration from "./formatDuration";
 
 const SongCard = (props:SongCardProps) => {
 
@@ -20,7 +21,7 @@ const SongCard = (props:SongCardProps) => {
         <>
             <h1>{props.trackInfo.title}</h1>
             <p>{props.trackInfo.artist}</p>
-            <p>{props.trackInfo.duration}</p>
+            <p>{formatDuration(props.trackInfo.duration)}</p>
             <p>Reproduccions: {props.trackInfo.reproduccions}</p>
             <p>
                 <img onClick = {() => handleClickLike()} 

@@ -8,6 +8,7 @@ import type { TrackView } from './Components/Songs/Types/TrackView';
 import type { Like } from './Components/Songs/Types/Like';
 import Reproduint from './Components/Reproduint/reproduint';
 import ListSongs from './Components/Songs/ListSongs';
+import formatDuration from './Components/Songs/formatDuration';
 
 const userNames: string[] = ['Isaac', 'Bernardinho', 'Ayoub i força al canut', 'Pedro Sanchez'];
 const randomUser: User = {
@@ -110,7 +111,7 @@ function App() {
             <ol>
               {history.map((playedTrack, index) => (
                 <li key={index}>
-                  {playedTrack.title} - {playedTrack.artist}
+                  {playedTrack.title} - {playedTrack.artist} ({formatDuration(playedTrack.duration)})
                 </li>
               ))}
             </ol>

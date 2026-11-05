@@ -1,4 +1,5 @@
 import type { SongRowProps } from "./Types/SongRowProps"
+import formatDuration from "./formatDuration";
 
 const SongRow = (props: SongRowProps) => {
 
@@ -6,7 +7,7 @@ const SongRow = (props: SongRowProps) => {
         <tr>
             <td>{props.title}</td>
             <td>{props.artist}</td>
-            <td>{props.duration}</td>
+            <td>{formatDuration(props.duration)}</td>
         </tr>
     );
 }
