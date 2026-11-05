@@ -1,5 +1,5 @@
-import type { TrackListView } from "./TrackListView"
+import type { GETTrack } from "../../../APIManagment/Tracks/Interfaces/Track";
 
-export interface SongListProps {
-    tracks: TrackListView[];
+export interface SongListProps{
+    tracks: GETTrack[]
 }
