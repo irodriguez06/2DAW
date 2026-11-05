@@ -1,1 +1,0 @@
-export const MAXUSERNAME: number = 50;

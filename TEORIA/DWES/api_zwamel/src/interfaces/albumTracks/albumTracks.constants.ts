@@ -1,1 +1,0 @@
-export const MAXALBUMTRACKSNAME: number = 50;

@@ -1,1 +1,0 @@
-export const MAXCOUNTRYNAME: number = 50;
