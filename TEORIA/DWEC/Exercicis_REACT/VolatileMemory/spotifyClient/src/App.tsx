@@ -26,6 +26,7 @@ function App() {
         }
     }
   );
+  const [history, setHistory] = useState<TrackView[]>([]);
 
   function incrementarReproduccions() {
     const tr = (prev: TrackView): TrackView => {
@@ -35,6 +36,7 @@ function App() {
       }
     }
     setTrack(tr);
+    setHistory((prev) => [track, ...prev]);
   }
 
   function handleClickRandom() {
@@ -91,14 +93,30 @@ function App() {
       <p><button type="button" onClick={handleClickRandom}>RandomTrack</button></p>
       <SongCard trackInfo={track} play={() => incrementarReproduccions()} like={() => gestionarLikes()} reset={() => resetejar()}/>
       <Reproduint />
-      <table>
-      <thead>
-        <title>List Songs</title>
-      </thead>
-      <tbody>
-        <ListSongs tracks={tracks} />
-      </tbody>
-    </table>
+      <div className="songs-sidebar">
+        <table>
+          <thead>
+            <title>List Songs</title>
+          </thead>
+          <tbody>
+            <ListSongs tracks={tracks} />
+          </tbody>
+        </table>
+        <section className="history">
+          <h2>Historial</h2>
+          {history.length === 0 ? (
+            <p>Encara no s'ha reproduït cap cançó.</p>
+          ) : (
+            <ol>
+              {history.map((playedTrack, index) => (
+                <li key={index}>
+                  {playedTrack.title} - {playedTrack.artist}
+                </li>
+              ))}
+            </ol>
+          )}
+        </section>
+      </div>
     </main>
   )
 }
