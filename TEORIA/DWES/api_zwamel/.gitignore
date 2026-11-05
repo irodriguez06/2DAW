@@ -1,4 +1,5 @@
 **/node_modules/
+/dist/
 DWES/spotify-api/docker/DB/
 DWES/spotify-api/.env
 .env

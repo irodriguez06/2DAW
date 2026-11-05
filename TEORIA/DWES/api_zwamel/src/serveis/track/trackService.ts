@@ -1,5 +1,3 @@
-import { randomUUID } from "crypto";
-import { tracks } from "../../data/track/track";
 import { Track } from "../../interfaces/track/track";
 import { TrackBD } from "../../interfaces/track/trackBD";
 import { isValidTrack } from "../../validators/track.Validator";
@@ -16,7 +14,7 @@ export async function getAllTracks(): Promise<TrackBD[]> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
 
-    const queryText: string = `Select * from Track`;
+    const queryText: string = `Select t.*, a.name as artist from Track t inner join artist a on t.artist_id=a.id`;
 
     const result: IResult<TrackBD> = await request.query(queryText);
     return result.recordset;
@@ -27,7 +25,7 @@ export async function getTrackById(idTrack: string): Promise<SelectSuccessServic
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
 
-    const queryText: string = `Select * from Track Where Track.id = @id`;
+    const queryText: string = `Select t.*, a.name as artist from Track t inner join artist a on t.artist_id=a.id Where Track.id = @id`;
     request.input("id", sql.UniqueIdentifier, idTrack);
 
     const result: IResult<TrackBD> = await request.query(queryText);
@@ -47,34 +45,38 @@ export async function getTrackById(idTrack: string): Promise<SelectSuccessServic
 }
 
 export async function createTrack(track: Track): Promise<CreateSuccessService<number> | ErrorService> {
+
     if (!isValidTrack(track)) {
         return { success: false, code: 400, message: "Invalid data" };
     }
 
-    const title:string = track.title.trim().replace(/\s+/g, " ");
+    const title: string = track.title.trim().replace(/\s+/g, " ")
+
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
 
-    const queryText: string = `INSERT INTO TRACK(title,artist_id,duration)
-    VALUES(@title,@artist_id,@duration)
+    const queryText: string = `INSERT INTO TRACK(title, artist_id, duration)
+        VALUES(@title, @artist_id, @duration)
     `;
 
-    request.input("title",sql.NVarChar,title);
-    request.input("artist_id",sql.UniqueIdentifier,track.artist);
-    request.input("duration",sql.Numeric,track.duration);
+    request.input("title", sql.NVarChar, title);
+    request.input("artist_id", sql.UniqueIdentifier, track.artist);
+    request.input("duration", sql.Numeric, track.duration);
 
     const result: IResult<number> = await request.query(queryText);
-    console.log(result);
 
     return { success: true, code: 201, data: result.rowsAffected[0] };
+
 }
 
 export async function updateTrack(track: Track, idTrack: string): Promise<UpdateSuccessService<number> | ErrorService> {
+
     if (!isValidTrack(track)) {
         return { success: false, code: 400, message: "Invalid data" };
     }
 
-    const title:string = track.title.trim().replace(/\s+/g, " ");
+    const title: string = track.title.trim().replace(/\s+/g, " ")
+
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
 
@@ -83,22 +85,22 @@ export async function updateTrack(track: Track, idTrack: string): Promise<Update
         where track.id=@id
     `;
 
-    request.input("title",sql.NVarChar,title);
-    request.input("artist_id",sql.UniqueIdentifier,track.artist);
-    request.input("duration",sql.Numeric,track.duration);
+    request.input("title", sql.NVarChar, title);
+    request.input("artist_id", sql.UniqueIdentifier, track.artist);
+    request.input("duration", sql.Numeric, track.duration);
     request.input("id", sql.UniqueIdentifier, idTrack);
 
     const result: IResult<number> = await request.query(queryText);
-    
+
     if (result.rowsAffected[0] === 0) {
         return {
             success: false,
             code: 404,
-            message: "Track not found",
+            message: "Track not found"
         }
     }
 
-    return { success: true, code: 201, data: result.rowsAffected[0] };
+    return { success: true, code: 200, data: result.rowsAffected[0] };
 }
 
 export async function deleteTrack(idTrack: string): Promise<DeleteSuccessService | ErrorService> {
@@ -120,6 +122,7 @@ export async function deleteTrack(idTrack: string): Promise<DeleteSuccessService
     }
     return {
         success: true,
-        code: 200,
+        code: 204
     }
+
 }
