@@ -1,64 +1,70 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css'
-import Header from './Components/Header/Header'
+import Header from './Components/Header/Header';
 import SongCard from './Components/Songs/SongCard'
-import type { User } from './Model/User';
-import type { TrackView } from './Components/Songs/Types/TrackView';
-import type { Like } from './Components/Songs/Types/Like';
 import Reproduint from './Components/Reproduint/reproduint';
+import type { TrackView } from './Components/Songs/Types/TrackView';
+import { users } from './Data/user';
+import type { Like } from './Components/Songs/Types/Like';
 import ListSongs from './Components/Songs/ListSongs';
-import type { Track } from './Model/Track';
+import { ENV } from './Config/env';
+import type { GETTrack } from './APIManagment/Tracks/Interfaces/Track';
 
-const userNames: string[] = ['Isaac', 'Bernardinho', 'Ayoub i força al canut', 'Pedro Sanchez'];
-const randomUser: User = {
-  name: userNames[Math.floor(Math.random() * userNames.length)]
-};
 
 function App() {
 
-  const [tracks, setTracks] = useState<Track[]>([]);
-
-  const [track, setTrack] = useState<TrackView>(
-    {
-      ...tracks[Math.floor(Math.random() * tracks.length)],
-      reproduccions: Math.floor(Math.random() * 1000),
-      "likes": {
-          like: false,
-          totalLikes: 0
-        }
-    }
-  );
+  const [tracks, setTracks] = useState<GETTrack[]>([]);
+  const [randomUser] = useState(() => users[Math.floor(Math.random() * users.length)]);
+  const [track, setTrack] = useState<TrackView>(getRandomTrack);
+  const [playingTrackTitle, setPlayingTrackTitle] = useState<string | null>(null);
 
   async function carregarDadesTrack() {
-    const resposta: Response = await fetch("http://localhost:3000/tracks");
-    const listTrack:Track[] = await resposta.json() as Track[];
+    const resposta: Response = await fetch(`${ENV.API_BASE_URL}/tracks`);
+    const listTrack: GETTrack[] = await resposta.json() as GETTrack[];
     setTracks(listTrack)
+  }
+
+  useEffect(
+    () => {
+      carregarDadesTrack();
+    }, []);
+
+
+  function getRandomTrack(): TrackView {
+    const random: number = Math.floor(Math.random() * tracks.length);
+    const randomTrack: GETTrack = tracks[random];
+
+    return {
+      ...randomTrack,
+      reproduccions: Math.floor(Math.random() * 10000),
+      likes: {
+        like: false,
+        totalLikes: 0
+      }
+    };
   }
 
   function incrementarReproduccions() {
     const tr = (prev: TrackView): TrackView => {
       return {
         ...prev,
-        "reproduccions": prev.reproduccions + 1,
+        reproduccions: prev.reproduccions + 1
       }
     }
     setTrack(tr);
   }
 
+  function handlePlay() {
+    incrementarReproduccions();
+    setPlayingTrackTitle(track.title);
+  }
+
+
   function handleClickRandom() {
-    const tr = (prev: TrackView): TrackView => {
-      return {
-        ...prev,
-        ...tracks[Math.floor(Math.random() * tracks.length)],
-        "reproduccions": Math.floor(Math.random() * 1000),
-        "likes": {
-          like: false,
-          totalLikes: 0
-        }
-      }
-    }
-    setTrack(tr);
-  };
+    setTrack(() => ({
+      ...getRandomTrack()
+    }));
+  }
 
   function gestionarLikes() {
     const tr = (prev: TrackView): TrackView => {
@@ -66,54 +72,59 @@ function App() {
       if (prev.likes.like) {
         increment = -1;
       }
-      const likeObj:Like = {
+      let likeObj: Like = {
         like: !prev.likes.like,
-        totalLikes: prev.likes.totalLikes + increment,
-      }
+        totalLikes: prev.likes.totalLikes + increment
+      };
 
       return {
         ...prev,
-        "likes":likeObj,
+        likes: likeObj
       }
     }
     setTrack(tr);
   }
 
-  function resetejar() {
+  function gestionarReset() {
     setTrack((prev) => ({
       ...prev,
-
-        "likes": {
-          like: false,
-          totalLikes: 0
-        },
-        reproduccions: 0
+      reproduccions: 0,
+      likes: {
+        like: false,
+        totalLikes: 0
       }
-    )
-  )
-}
+    }));
+  }
 
   return (
-    <main>
-      <Header user={randomUser} />
-      <p><button type="button" onClick={handleClickRandom}>RandomTrack</button></p>
-      <SongCard trackInfo={track} play={() => incrementarReproduccions()} like={() => gestionarLikes()} reset={() => resetejar()}/>
-      <Reproduint />
-    {
-      tracks.length>0?
-        <table>
-      <thead>
-        <title>List Songs</title>
-      </thead>
-      <tbody>
-        <ListSongs tracks={tracks} />
-      </tbody>
-    </table>
-    :<p>
-        <button onClick={carregarDadesTrack}>Carregar Tracks</button>
-      </p>
-    }
-    </main>
+    <>
+      <Header title="Spotify" user={randomUser.name} />
+      <main>
+        {
+          tracks.length > 0 ?
+            <table>
+              <thead>
+                <title>List Songs</title>
+              </thead>
+              <tbody>
+                <ListSongs tracks={tracks} />
+              </tbody>
+            </table>
+            : <p>
+              No track available
+            </p>
+        }
+
+        <section>
+          <SongCard trackInfo={track} play={handlePlay} like={() => gestionarLikes()} reset={() => gestionarReset()} />
+        </section>
+        <p><button onClick={handleClickRandom}>Random</button></p >
+        <Reproduint
+          playingTrackTitle={playingTrackTitle}
+          stop={() => setPlayingTrackTitle(null)}
+        />
+      </main>
+    </>
   )
 }
 
