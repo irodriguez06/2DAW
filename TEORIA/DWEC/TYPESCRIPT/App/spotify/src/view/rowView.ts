@@ -1,25 +1,36 @@
 import type { Track } from "../interface/track";
 
-export function createRowSong(track: Track, mostrarInfoCanço: (track: Track) => void): HTMLTableRowElement {
-
-    const songtr: HTMLTableRowElement = document.createElement("tr");
+export function createRowSong(
+    track: Track,
+    emplenarCardTrack: (id: string) => void
+): HTMLTableRowElement {
+    const songTr: HTMLTableRowElement = document.createElement("tr");
 
     const titleTd: HTMLTableCellElement = document.createElement("td");
     titleTd.textContent = track.title;
-    titleTd.addEventListener("click", () => mostrarInfoCanço(track));
+    titleTd.addEventListener("click", () => {
+        emplenarCardTrack(track.id);
+    });
 
     const durationTd: HTMLTableCellElement = document.createElement("td");
     durationTd.textContent = track.duration.toString();
-    durationTd.addEventListener("click", () => mostrarInfoCanço(track));
+    durationTd.addEventListener("click", () => {
+        emplenarCardTrack(track.id);
+    });
 
     const reproduccionsTd: HTMLTableCellElement = document.createElement("td");
-    reproduccionsTd.textContent = track.reproduccions.toString();
+    const textReproduccions: HTMLSpanElement = document.createElement("span");
+    textReproduccions.textContent = "0";
+    const botoPlay: HTMLButtonElement = document.createElement("button");
+    botoPlay.type = "button";
+    botoPlay.textContent = "Play";
 
-    songtr.appendChild(titleTd);
-    songtr.appendChild(durationTd);
-    songtr.appendChild(reproduccionsTd);
+    songTr.appendChild(titleTd);
+    songTr.appendChild(durationTd);
+    songTr.appendChild(reproduccionsTd);
 
+    reproduccionsTd.appendChild(textReproduccions);
+    reproduccionsTd.appendChild(botoPlay);
 
-
-    return songtr;
+    return songTr;
 }

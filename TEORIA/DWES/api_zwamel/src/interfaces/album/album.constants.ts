@@ -1,0 +1,1 @@
+export const MAXALBUMNAME: number = 50;

@@ -1,13 +1,14 @@
 import { tracks } from "../../data/track";
-import type { Track } from "../../interface/track";
 import { createTableHead } from "./createTableHead";
 import { llistaCancons } from "./llistaCancons";
 
-export function crearTableSongs(tbody: HTMLTableSectionElement, mostrarInfoCanço: (track: Track) => void): HTMLTableElement {
+export function crearTableSongs(
+    tbody: HTMLTableSectionElement,
+    emplenarCardTrack: (id: string) => void
+): HTMLTableElement {
     const table: HTMLTableElement = document.createElement("table");
     table.appendChild(createTableHead());
-
-    llistaCancons(tracks, tbody, mostrarInfoCanço);
+    llistaCancons(tracks, tbody, emplenarCardTrack);
     table.appendChild(tbody);
     return table;
 }

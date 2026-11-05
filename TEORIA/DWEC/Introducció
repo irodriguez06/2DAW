@@ -1,0 +1,9 @@
+Arquitectura client servidor, on s'executa el codi:
+- Client (Front-end): Part que utilitza l’usuari. Demana dades i les mostra.
+- Servidor (Back-end): Rep peticions, processa i guarda dades, i envia respostes.
+
+Validacions:
+- Validació al client: Ràpida i dona feedback immediat, però no és segura perquè es pot saltar.
+- Validació al servidor: Obligatòria i segura. Comprova les dades abans de guardar-les.
+
+Concepte clau: Client no fiable.

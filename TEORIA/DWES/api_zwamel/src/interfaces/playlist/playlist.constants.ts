@@ -1,0 +1,1 @@
+export const MAXPLAYLISTNAME: number = 50;

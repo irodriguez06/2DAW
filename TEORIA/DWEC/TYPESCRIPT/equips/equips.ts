@@ -1,72 +1,46 @@
-interface Jugador {
+interface Jugador{
     nom: string;
     titular: boolean;
     dorsal: number;
 }
 
-interface Equip {
+interface Equips{
     nom: string;
     jugadors: Jugador[];
 }
 
-const equips: Equip[] = [
+const equips: Equips[] = [
     {
-        nom: "RCD Espanyol",
+        nom: "Boscdelacoma",
         jugadors: [
-            {
-                nom: "Urko",
-                titular: true,
-                dorsal: 4
-            },
-            {
-                nom: "Roberto Fernández",
-                titular: true,
-                dorsal: 9
-            },
-            {
-                nom: "Leandro Cabrera",
-                titular: false,
-                dorsal: 6
-            }
+            { nom: "Sei", titular: true, dorsal: 1 },
+            { nom: "Miquel Boada", titular: true, dorsal: 2 },
+            { nom: "Joan Caselles", titular: false, dorsal: 3 }
         ]
     },
     {
-        nom: "Atleti de Madrid",
+        nom: "Montscopa",
         jugadors: [
-            {
-                nom: "Oblak",
-                titular: true,
-                dorsal: 13
-            },
-            {
-                nom: "Marcos Llorente",
-                titular: true,
-                dorsal: 14
-            },
-            {
-                nom: "Julian Álvarez",
-                titular: false,
-                dorsal: 19
-            }
+            { nom: "Maria Galicia", titular: true, dorsal: 4 },
+            { nom: "Maria Boada", titular: true, dorsal: 5 },
+            { nom: "Nilsson Raviña", titular: false, dorsal: 6 }
         ]
     }
 ];
 
-function equipTitular(equips: Equip[], nom: string): Jugador[] {
-    const equipSel: Equip | undefined = equips.find(
-        (e: Equip) => { return e.nom === nom; }
+const nomEquip: string = "Boscdelacoma";
+
+const jugadorsTitulars: Jugador[] = equipTitular(equips,nomEquip);
+
+function equipTitular(equips: Equips[], nomEquip: string): Jugador[] {
+    
+    const equipFinal:Equips = equips.filter(
+        (e: Equips) => e.nom === nomEquip
+    )[0];
+
+    return equipFinal.jugadors.filter(
+        (j: Jugador) => j.titular
     );
-
-    if (equipSel === undefined) {
-        return []
-    }
-    return equipSel.jugadors.filter(
-        (j: Jugador) => { return j.titular; }
-    )
 }
-
-const nomEquip: string = "RCD Espanyol";
-
-const jugadorsTitulars: Jugador[] = equipTitular(equips, nomEquip);
 
 console.log(jugadorsTitulars);

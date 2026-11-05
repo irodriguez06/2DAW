@@ -1,0 +1,1 @@
+export const MAXHISTORYDATA: number = 50;

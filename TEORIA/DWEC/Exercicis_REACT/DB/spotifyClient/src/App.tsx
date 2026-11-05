@@ -1,0 +1,120 @@
+import { useState } from 'react';
+import './App.css'
+import Header from './Components/Header/Header'
+import SongCard from './Components/Songs/SongCard'
+import type { User } from './Model/User';
+import type { TrackView } from './Components/Songs/Types/TrackView';
+import type { Like } from './Components/Songs/Types/Like';
+import Reproduint from './Components/Reproduint/reproduint';
+import ListSongs from './Components/Songs/ListSongs';
+import type { Track } from './Model/Track';
+
+const userNames: string[] = ['Isaac', 'Bernardinho', 'Ayoub i força al canut', 'Pedro Sanchez'];
+const randomUser: User = {
+  name: userNames[Math.floor(Math.random() * userNames.length)]
+};
+
+function App() {
+
+  const [tracks, setTracks] = useState<Track[]>([]);
+
+  const [track, setTrack] = useState<TrackView>(
+    {
+      ...tracks[Math.floor(Math.random() * tracks.length)],
+      reproduccions: Math.floor(Math.random() * 1000),
+      "likes": {
+          like: false,
+          totalLikes: 0
+        }
+    }
+  );
+
+  async function carregarDadesTrack() {
+    const resposta: Response = await fetch("http://localhost:3000/tracks");
+    const listTrack:Track[] = await resposta.json() as Track[];
+    setTracks(listTrack)
+  }
+
+  function incrementarReproduccions() {
+    const tr = (prev: TrackView): TrackView => {
+      return {
+        ...prev,
+        "reproduccions": prev.reproduccions + 1,
+      }
+    }
+    setTrack(tr);
+  }
+
+  function handleClickRandom() {
+    const tr = (prev: TrackView): TrackView => {
+      return {
+        ...prev,
+        ...tracks[Math.floor(Math.random() * tracks.length)],
+        "reproduccions": Math.floor(Math.random() * 1000),
+        "likes": {
+          like: false,
+          totalLikes: 0
+        }
+      }
+    }
+    setTrack(tr);
+  };
+
+  function gestionarLikes() {
+    const tr = (prev: TrackView): TrackView => {
+      let increment: number = 1;
+      if (prev.likes.like) {
+        increment = -1;
+      }
+      const likeObj:Like = {
+        like: !prev.likes.like,
+        totalLikes: prev.likes.totalLikes + increment,
+      }
+
+      return {
+        ...prev,
+        "likes":likeObj,
+      }
+    }
+    setTrack(tr);
+  }
+
+  function resetejar() {
+    setTrack((prev) => ({
+      ...prev,
+
+        "likes": {
+          like: false,
+          totalLikes: 0
+        },
+        reproduccions: 0
+      }
+    )
+  )
+}
+
+  return (
+    <main>
+      <Header user={randomUser} />
+      <p><button type="button" onClick={handleClickRandom}>RandomTrack</button></p>
+      <SongCard trackInfo={track} play={() => incrementarReproduccions()} like={() => gestionarLikes()} reset={() => resetejar()}/>
+      <Reproduint />
+    {
+      tracks.length>0?
+        <table>
+      <thead>
+        <title>List Songs</title>
+      </thead>
+      <tbody>
+        <ListSongs tracks={tracks} />
+      </tbody>
+    </table>
+    :<p>
+        <button onClick={carregarDadesTrack}>Carregar Tracks</button>
+      </p>
+    }
+    </main>
+  )
+}
+
+export default App

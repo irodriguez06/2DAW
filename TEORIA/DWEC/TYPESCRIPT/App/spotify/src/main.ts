@@ -2,34 +2,21 @@ import { tracks } from './data/track';
 import type { Track } from './interface/track';
 import './style.css';
 import { crearCerca } from './view/cerca/cerca';
-import { crearTitol } from './view/crearTitol';
 import { crearTableSongs } from './view/tableSongs/crearTableSongs';
+import { crearTitol } from './view/tableSongs/crearTitol';
 import { llistaCancons } from './view/tableSongs/llistaCancons';
+import { crearBotoTancar } from './view/tableSongs/crearBotoTancar';
 
 
-const appObj: HTMLElement = document.querySelector<HTMLDivElement>('#app')!;
+const appObj: HTMLDivElement = document.querySelector<HTMLDivElement>('#app')!;
 const tbody: HTMLTableSectionElement = document.createElement("tbody");
 const cardTrack: HTMLDivElement = document.createElement("div");
-cardTrack.className = "cardTrack";
 
-function emplenarCard(track: Track): void {
-    cardTrack.textContent = "";
-
-    const textTrack: HTMLParagraphElement = document.createElement("p");
-    textTrack.textContent = `${track.title} - ${track.artist}`;
-
-    const tancarButton: HTMLButtonElement = document.createElement("button");
-    tancarButton.textContent = "X";
-    tancarButton.addEventListener("click", () => {
-        cardTrack.textContent = "";
-    });
-
-    cardTrack.appendChild(textTrack);
-    cardTrack.appendChild(tancarButton);
-}
-
-const seleccionarCanço: (track: Track) => void = (track: Track): void => {
-    emplenarCard(track)
+const emplenarCardTrack: (id: string) => void = (id: string) => {
+    const t: Track | undefined = tracks.find((track: Track) => { return track.id === id; });
+    if (t) {
+        crearBotoTancar(t, cardTrack);
+    }
 };
 
 const cercar: (textABuscar: string) => void = (textABuscar: string) => {
@@ -37,12 +24,10 @@ const cercar: (textABuscar: string) => void = (textABuscar: string) => {
         (t: Track) => { return t.title.toLowerCase().includes(textABuscar.trim().toLowerCase()); }
     );
     tbody.innerHTML = "";
-    llistaCancons(llistaTracks, tbody, seleccionarCanço);
+    llistaCancons(llistaTracks, tbody, emplenarCardTrack);
 }
 
 appObj.appendChild(crearTitol());
+appObj.appendChild(crearTableSongs(tbody, emplenarCardTrack));
 appObj.appendChild(crearCerca(cercar));
-appObj.appendChild(crearTableSongs(tbody, seleccionarCanço));
 appObj.appendChild(cardTrack);
-
-

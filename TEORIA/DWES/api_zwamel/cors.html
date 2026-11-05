@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ca">
+	<head>
+	  <meta charset="UTF-8">
+	  <title>Prova CORS</title>
+	</head>
+	<body>
+
+	  <h1>Prova CORS</h1>
+
+	  <button id="boto">Carregar tracks</button>
+
+	  <pre id="resultat"></pre>
+
+	  <script>
+	    const boto = document.querySelector("#boto");
+	    const resultat = document.querySelector("#resultat");
+
+	    boto.addEventListener("click", async () => {
+	      try {
+	        const response = await fetch("http://localhost:3000/tracks");
+
+	        const data = await response.json();
+
+	        resultat.textContent = JSON.stringify(data, null, 2);
+	      } catch (error) {
+	        console.error(error);
+	        resultat.textContent = "Error consultant l'API";
+	      }
+	    });
+	  </script>
+
+	</body>
+</html>
