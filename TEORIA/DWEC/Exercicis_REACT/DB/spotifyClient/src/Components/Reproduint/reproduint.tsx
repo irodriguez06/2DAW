@@ -1,34 +1,35 @@
-import { useState } from "react";
+import { useState } from 'react';
+import type { ReproduintProps } from './Types/ReproduintProps';
 
-const Reproduint = () => {
-    const [volum, setVolum] = useState<number>(0);
+const Reproduint = (props: ReproduintProps) => {
+  const [volume, setVolume] = useState(50);
 
-    function pujarVolum() {
-        setVolum((prev) => {
-            if (prev + 1 > 100) {
-                return 100;
-            }
-            return prev + 1;
-        });
+  function baixarVolum() {
+    if (volume > 0) {
+      setVolume(volume - 1);
     }
+  }
 
-    function baixarVolum() {
-        setVolum((prev) => {
-            if (prev - 1 < 0) {
-                return 0;
-            }
-            return prev - 1;
-        });
+  function pujarVolum() {
+    if (volume < 100) {
+      setVolume(volume + 1);
     }
+  }
 
-    return (
-        <section>
-            <h1>Reproduint</h1>
-            <p>Volum: {volum}</p>
-            <button type = "button" onClick={() => pujarVolum()}>+</button>
-            <button type = "button" onClick={() => baixarVolum()}>-</button>
-        </section>
-    );
+  return (
+    <section>
+      <h1>REPRODUCTOR</h1>
+      <div>
+        <span>Volum: {volume}</span>{' '}
+        <button type="button" onClick={baixarVolum}>-</button>
+        <button type="button" onClick={pujarVolum}>+</button>
+      </div>
+      <p>{props.playingTrackTitle ?? 'no song is playing'}</p>
+      {props.playingTrackTitle !== null && (
+        <button type="button" onClick={props.stop}>Stop</button>
+      )}
+    </section>
+  );
 };
 
 export default Reproduint;
