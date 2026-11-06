@@ -38,11 +38,6 @@ export function createHistory(
     return {
         success: true,
         code: 201,
-        data: {
-            id: randomUUID(),
-            user: userId,
-            track: trackId,
-            data: new Date(item.data.trim()).toISOString(),
-        },
+        data: 1,
     };
 }

@@ -14,3 +14,4 @@ userRouter.get("/:id", getUserByIdController)
 userRouter.post("/", postUserController)
 userRouter.put("/:id", putUserController)
 userRouter.delete("/:id", deleteUserController)
+userRouter.post("/:id/song/history"); // /users/:id
