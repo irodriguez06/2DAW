@@ -3,7 +3,6 @@ import { createTrack, deleteTrack, getAllTracks, getTrackById, updateTrack} from
 import { TrackBD } from "../interfaces/track/trackBD";
 import { CreateSuccessService } from "../interfaces/error/createSuccessService";
 import { ErrorService } from "../interfaces/error/errorService";
-import { tracks } from "../data/track/track";
 import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
 import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 import { SelectSuccessService } from "../interfaces/error/selectSuccessService";
