@@ -8,4 +8,4 @@ trackRouter.get("/:id", getTrackByIdController)
 trackRouter.post("/:id", postTrackController)
 trackRouter.put("/:id", putTrackController)
 trackRouter.delete("/:id", deleteTrackController)
-trackRouter.post("/user:id/history"); // /tracks/:id
+// trackRouter.post("/user:id/history");
