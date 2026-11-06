@@ -5,6 +5,6 @@ export const albumRouter:Router = Router();
 
 albumRouter.get("/", getAllAlbumsController)
 albumRouter.get("/:id", getAlbumByIdController)
-albumRouter.post("/:id", postAlbumController)
+albumRouter.post("/", postAlbumController)
 albumRouter.put("/:id", putAlbumController)
 albumRouter.delete("/:id", deleteAlbumController)

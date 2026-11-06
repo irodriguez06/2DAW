@@ -32,8 +32,8 @@ app.use("/tracks", trackRouter); // fet
 app.use("/artists", artistRouter); // fet
 app.use("/countries", countryRouter); // fet
 app.use("/users", userRouter); // fet
-app.use("/playlists", playlistRouter);
+app.use("/playlists", playlistRouter); // fet
 app.use("/histories", historyRouter);
-app.use("/albums", albumRouter);
+app.use("/albums", albumRouter); // fet
 app.use("/playlisttracks", playlistTrackRouter);
 app.use("/albumtracks", albumTrackRouter);

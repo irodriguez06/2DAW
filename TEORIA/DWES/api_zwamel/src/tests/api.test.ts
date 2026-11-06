@@ -141,17 +141,17 @@ describe("API HTTP", () => {
     });
 
     it("gestiona els àlbums amb referències d'artista vàlides", async () => {
-        const invalidResponse = await sendJson("/albums/ignored", "POST", { title: "", artist: artistId, data: "no-date" });
+        const invalidResponse = await sendJson("/albums", "POST", { title: "", artist: artistId, data: "no-date" });
         assert.equal(invalidResponse.status, 400);
 
-        const missingArtistResponse = await sendJson("/albums/ignored", "POST", {
+        const missingArtistResponse = await sendJson("/albums", "POST", {
             title: "Àlbum",
             artist: "missing",
             data: "2025-02-03",
         });
         assert.equal(missingArtistResponse.status, 404);
 
-        const createResponse = await sendJson("/albums/ignored", "POST", {
+        const createResponse = await sendJson("/albums", "POST", {
             title: "  Àlbum   nou ",
             artist: artistId,
             data: "2025-02-03",
