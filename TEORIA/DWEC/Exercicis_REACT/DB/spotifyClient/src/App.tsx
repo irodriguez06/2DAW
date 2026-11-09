@@ -11,10 +11,18 @@ import { ENV } from './Config/env';
 import type { GETTrack } from './APIManagment/Tracks/Interfaces/Track';
 import type { AddHistory } from './APIManagment/History/Interfaces/HistoryCreate';
 
+interface GETPlaylist {
+  id: string;
+  name?: string;
+  title?: string;
+}
 
 function App() {
 
   const [tracks, setTracks] = useState<GETTrack[]>([]);
+  const [playlists, setPlaylists] = useState<GETPlaylist[]>([]);
+  const [playlistsLoading, setPlaylistsLoading] = useState(true);
+  const [playlistsError, setPlaylistsError] = useState<string | null>(null);
   const [randomUser] = useState(() => users[Math.floor(Math.random() * users.length)]);
   const [track, setTrack] = useState<TrackView>(getRandomTrack);
   const [playingTrackTitle, setPlayingTrackTitle] = useState<string | null>(null);
@@ -25,9 +33,25 @@ function App() {
     setTracks(listTrack)
   }
 
+  async function carregarDadesPlaylist() {
+    try {
+      const resposta = await fetch(`${ENV.API_BASE_URL}/playlists`);
+      if (!resposta.ok) {
+        throw new Error(`Error carregant les playlists (${resposta.status})`);
+      }
+      const listPlaylist: GETPlaylist[] = await resposta.json() as GETPlaylist[];
+      setPlaylists(listPlaylist);
+    } catch (error) {
+      setPlaylistsError(error instanceof Error ? error.message : 'Error carregant les playlists');
+    } finally {
+      setPlaylistsLoading(false);
+    }
+  }
+
   useEffect(
     () => {
       carregarDadesTrack();
+      carregarDadesPlaylist();
     }, []);
 
 
@@ -124,9 +148,10 @@ function App() {
     <>
       <Header title="Spotify" user={randomUser.name} />
       <main>
-        {
-          tracks.length > 0 ?
-            <section className="tracks-panel">
+        <div className="tracks-column">
+          {
+            tracks.length > 0 ?
+              <section className="tracks-panel">
               <h2>Tracks</h2>
               <table>
                 <thead>
@@ -144,11 +169,32 @@ function App() {
                   />
                 </tbody>
               </table>
-            </section>
-            : <p>
-              No track available
-            </p>
-        }
+              </section>
+              : <section className="tracks-panel">
+                <h2>Tracks</h2>
+                <p>No track available</p>
+              </section>
+          }
+
+          <section className="playlists-panel">
+            <h2>Playlists</h2>
+            {playlistsLoading ? (
+              <p>Carregant playlists...</p>
+            ) : playlistsError !== null ? (
+              <p role="alert">{playlistsError}</p>
+            ) : playlists.length > 0 ? (
+              <ul>
+                {playlists.map((playlist) => (
+                  <li key={playlist.id}>
+                    {playlist.name ?? playlist.title ?? `Playlist ${playlist.id}`}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No hi ha playlists disponibles.</p>
+            )}
+          </section>
+        </div>
 
         <section>
           <SongCard trackInfo={track} play={handlePlay} like={() => gestionarLikes()} reset={() => gestionarReset()} />
