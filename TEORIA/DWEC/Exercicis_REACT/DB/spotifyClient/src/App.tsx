@@ -134,10 +134,14 @@ function App() {
                     <th>Cançó</th>
                     <th>Artista</th>
                     <th>Durada</th>
+                    <th>Reproducció</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <ListSongs tracks={tracks} />
+                  <ListSongs
+                    tracks={tracks}
+                    onPlay={(selectedTrack) => setPlayingTrackTitle(selectedTrack.title)}
+                  />
                 </tbody>
               </table>
             </section>
