@@ -11,7 +11,8 @@
 }
 
 .tracks-panel,
-.playlists-panel {
+.playlists-panel,
+.playlist-tracks-panel {
   border: 1px solid black;
   border-radius: 8px;
   padding: 12px;
@@ -20,7 +21,8 @@
 }
 
 .tracks-panel h2,
-.playlists-panel h2 {
+.playlists-panel h2,
+.playlist-tracks-panel h2 {
   margin-top: 0;
 }
 

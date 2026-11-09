@@ -17,12 +17,22 @@ interface GETPlaylist {
   title?: string;
 }
 
+interface GETPlaylistTrack {
+  id: string;
+  playlist: string;
+  track: string;
+}
+
 function App() {
 
   const [tracks, setTracks] = useState<GETTrack[]>([]);
   const [playlists, setPlaylists] = useState<GETPlaylist[]>([]);
   const [playlistsLoading, setPlaylistsLoading] = useState(true);
   const [playlistsError, setPlaylistsError] = useState<string | null>(null);
+  const [selectedPlaylist, setSelectedPlaylist] = useState<GETPlaylist | null>(null);
+  const [playlistTracks, setPlaylistTracks] = useState<GETTrack[]>([]);
+  const [playlistTracksLoading, setPlaylistTracksLoading] = useState(false);
+  const [playlistTracksError, setPlaylistTracksError] = useState<string | null>(null);
   const [randomUser] = useState(() => users[Math.floor(Math.random() * users.length)]);
   const [track, setTrack] = useState<TrackView>(getRandomTrack);
   const [playingTrackTitle, setPlayingTrackTitle] = useState<string | null>(null);
@@ -45,6 +55,43 @@ function App() {
       setPlaylistsError(error instanceof Error ? error.message : 'Error carregant les playlists');
     } finally {
       setPlaylistsLoading(false);
+    }
+  }
+
+  async function seleccionarPlaylist(playlist: GETPlaylist) {
+    setSelectedPlaylist(playlist);
+    setPlaylistTracks([]);
+    setPlaylistTracksError(null);
+    setPlaylistTracksLoading(true);
+
+    try {
+      const [playlistTracksResponse, tracksResponse] = await Promise.all([
+        fetch(`${ENV.API_BASE_URL}/playlisttracks`),
+        fetch(`${ENV.API_BASE_URL}/tracks`)
+      ]);
+
+      if (!playlistTracksResponse.ok) {
+        throw new Error(`Error carregant les cançons de la playlist (${playlistTracksResponse.status})`);
+      }
+      if (!tracksResponse.ok) {
+        throw new Error(`Error carregant els tracks (${tracksResponse.status})`);
+      }
+
+      const playlistTrackLinks: GETPlaylistTrack[] =
+        await playlistTracksResponse.json() as GETPlaylistTrack[];
+      const allTracks: GETTrack[] = await tracksResponse.json() as GETTrack[];
+      const selectedTracks = playlistTrackLinks
+        .filter((link) => link.playlist === playlist.id)
+        .map((link) => allTracks.find((trackItem) => trackItem.id === link.track))
+        .filter((trackItem): trackItem is GETTrack => trackItem !== undefined);
+
+      setPlaylistTracks(selectedTracks);
+    } catch (error) {
+      setPlaylistTracksError(
+        error instanceof Error ? error.message : 'Error carregant les cançons de la playlist'
+      );
+    } finally {
+      setPlaylistTracksLoading(false);
     }
   }
 
@@ -187,6 +234,10 @@ function App() {
                 {playlists.map((playlist) => (
                   <li key={playlist.id}>
                     {playlist.name ?? playlist.title ?? `Playlist ${playlist.id}`}
+                    {' '}
+                    <button type="button" onClick={() => seleccionarPlaylist(playlist)}>
+                      Seleccionar
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -194,6 +245,29 @@ function App() {
               <p>No hi ha playlists disponibles.</p>
             )}
           </section>
+
+          {selectedPlaylist !== null && (
+            <section className="playlist-tracks-panel">
+              <h2>
+                Cançons de {selectedPlaylist.name ?? selectedPlaylist.title ?? `Playlist ${selectedPlaylist.id}`}
+              </h2>
+              {playlistTracksLoading ? (
+                <p>Carregant cançons...</p>
+              ) : playlistTracksError !== null ? (
+                <p role="alert">{playlistTracksError}</p>
+              ) : playlistTracks.length > 0 ? (
+                <ul>
+                  {playlistTracks.map((playlistTrack) => (
+                    <li key={playlistTrack.id}>
+                      {playlistTrack.title} - {playlistTrack.artist}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Aquesta playlist encara no té cançons.</p>
+              )}
+            </section>
+          )}
         </div>
 
         <section>
