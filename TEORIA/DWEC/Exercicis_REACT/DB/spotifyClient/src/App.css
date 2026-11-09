@@ -26,13 +26,16 @@
   margin-top: 0;
 }
 
-.tracks-panel table {
+.tracks-panel table,
+.playlist-tracks-panel table {
   width: 100%;
   border-collapse: collapse;
 }
 
 .tracks-panel th,
-.tracks-panel td {
+.tracks-panel td,
+.playlist-tracks-panel th,
+.playlist-tracks-panel td {
   padding: 8px;
   border-bottom: 1px solid #ddd;
   text-align: left;

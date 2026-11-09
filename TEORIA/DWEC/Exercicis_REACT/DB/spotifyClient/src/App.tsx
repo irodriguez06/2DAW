@@ -256,13 +256,22 @@ function App() {
               ) : playlistTracksError !== null ? (
                 <p role="alert">{playlistTracksError}</p>
               ) : playlistTracks.length > 0 ? (
-                <ul>
-                  {playlistTracks.map((playlistTrack) => (
-                    <li key={playlistTrack.id}>
-                      {playlistTrack.title} - {playlistTrack.artist}
-                    </li>
-                  ))}
-                </ul>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Cançó</th>
+                      <th>Artista</th>
+                      <th>Durada</th>
+                      <th>Reproducció</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ListSongs
+                      tracks={playlistTracks}
+                      onPlay={(selectedTrack) => setPlayingTrackTitle(selectedTrack.title)}
+                    />
+                  </tbody>
+                </table>
               ) : (
                 <p>Aquesta playlist encara no té cançons.</p>
               )}
