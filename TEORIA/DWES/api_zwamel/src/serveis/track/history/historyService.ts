@@ -1,64 +1,80 @@
-import { history } from "../../../data/track/history/history";
-import { tracks } from "../../../data/track/track";
-import { users } from "../../../data/track/user/user";
+import { ConnectionPool, IResult } from "mssql";
+import sql from "mssql";
+import { getConnection } from "../../../config/database";
 import { CreateSuccessService } from "../../../interfaces/error/createSuccessService";
 import { ErrorService } from "../../../interfaces/error/errorService";
+import { SelectSuccessService } from "../../../interfaces/error/selectSuccessService";
 import { History } from "../../../interfaces/history/history";
 import { HistoryBD } from "../../../interfaces/history/historyBD";
 import { isValidHistory } from "../../../validators/historyValidator";
-import sql, { ConnectionPool, IResult } from "mssql";
-import { getConnection } from "../../../config/database";
 
-export function getAllHistory(): HistoryBD[] {
-    return [...history].sort(
-        (first, second) => second.date.getTime() - first.date.getTime(),
-    );
+export async function getAllHistory(): Promise<HistoryBD[]> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+
+    const result: IResult<HistoryBD> = await request.query(`
+        SELECT id, user_id AS [user], track_id AS track, [date]
+        FROM History
+        ORDER BY [date] DESC
+    `);
+
+    return result.recordset;
 }
 
-export function getHistoryById(idHistory: string): HistoryBD | undefined {
-    return history.find((item: HistoryBD) => item.id === idHistory);
+export async function getHistoryById(
+    idHistory: string,
+): Promise<SelectSuccessService<HistoryBD> | ErrorService> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    request.input("id", sql.UniqueIdentifier, idHistory);
+
+    const result: IResult<HistoryBD> = await request.query(`
+        SELECT id, user_id AS [user], track_id AS track, [date]
+        FROM History
+        WHERE id = @id
+    `);
+
+    if (result.recordset.length === 0) {
+        return { success: false, code: 404, message: "History record not found" };
+    }
+
+    return { success: true, code: 200, data: result.recordset[0] };
 }
 
-export function createHistory(
+export async function createHistory(
     item: History,
-): CreateSuccessService<HistoryBD> | ErrorService {
+): Promise<CreateSuccessService<number> | ErrorService> {
     if (!isValidHistory(item)) {
-        return { success: false, code: 400, message: "Invalid data" };
-    }
-
-    const userId: string = item.user.trim();
-    if (!users.some((user) => user.id === userId)) {
-        return { success: false, code: 404, message: `User ${userId} not found` };
-    }
-
-    const trackId: string = item.track.trim();
-    if (!tracks.some((track) => track.id === trackId)) {
-        return { success: false, code: 404, message: `Track ${trackId} not found` };
-    }
-
-    return {
-        success: true,
-        code: 201,
-        data: 1,
-    };
-}
-
-export async function addTrackUserHistory (historyTrack: History): Promise<CreateSuccessService<number> | ErrorService> {
-
-    if (!isValidHistory(historyTrack)) {
         return { success: false, code: 400, message: "Invalid data" };
     }
 
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
+    const userId: string = item.user.trim();
+    const trackId: string = item.track.trim();
+    request.input("user", sql.UniqueIdentifier, userId);
+    request.input("track", sql.UniqueIdentifier, trackId);
 
-    const queryText: string = `INSERT INTO History(user_id, track_id) VALUES(@user_id, @track_id)`;
+    const result: IResult<number> = await request.query(`
+        INSERT INTO History (user_id, track_id)
+        SELECT [User].id, Track.id
+        FROM [User]
+        CROSS JOIN Track
+        WHERE [User].id = @user
+          AND Track.id = @track
+    `);
 
-    request.input("user_id", sql.UniqueIdentifier, historyTrack.user);
-    request.input("track_id", sql.UniqueIdentifier, historyTrack.track);
+    if (result.rowsAffected[0] === 0) {
+        const userResult: IResult<{ id: string }> = await pool.request()
+            .input("user", sql.UniqueIdentifier, userId)
+            .query("SELECT id FROM [User] WHERE id = @user");
 
-    const result: IResult<number> = await request.query(queryText);
+        if (userResult.recordset.length === 0) {
+            return { success: false, code: 404, message: `User ${userId} not found` };
+        }
+
+        return { success: false, code: 404, message: `Track ${trackId} not found` };
+    }
 
     return { success: true, code: 201, data: result.rowsAffected[0] };
-
 }

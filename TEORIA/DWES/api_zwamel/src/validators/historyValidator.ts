@@ -5,7 +5,12 @@ export function isValidHistory(history: History): boolean {
         return false;
     }
 
-    if (!history.user || !history.track) {
+    if (
+        typeof history.user !== "string"
+        || typeof history.track !== "string"
+        || history.user.trim().length === 0
+        || history.track.trim().length === 0
+    ) {
         return false;
     }
 
