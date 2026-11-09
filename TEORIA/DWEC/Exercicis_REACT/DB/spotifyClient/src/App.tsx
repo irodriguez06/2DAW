@@ -9,6 +9,7 @@ import type { Like } from './Components/Songs/Types/Like';
 import ListSongs from './Components/Songs/ListSongs';
 import { ENV } from './Config/env';
 import type { GETTrack } from './APIManagment/Tracks/Interfaces/Track';
+import type { AddHistory } from './APIManagment/History/Interfaces/HistoryCreate';
 
 
 function App() {
@@ -44,13 +45,36 @@ function App() {
     };
   }
 
-  function incrementarReproduccions() {
+  async function incrementarReproduccions() {
     const tr = (prev: TrackView): TrackView => {
       return {
         ...prev,
         reproduccions: prev.reproduccions + 1
       }
     }
+
+    const newHistory:AddHistory = {
+      user: "123",
+      track: tracks[1].id
+    }
+
+    const response: Response = await fetch(
+      "http://localhost:3000/traqcks/user/history",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newHistory)
+      })
+
+      if (!response.ok) {
+        return false;
+      }
+
+      const result = await response.json();
+      console.log(result);
+
     setTrack(tr);
   }
 
