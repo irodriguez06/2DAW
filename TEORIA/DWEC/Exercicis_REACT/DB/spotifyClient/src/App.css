@@ -1,7 +1,38 @@
-table {
+.tracks-panel {
   position: absolute;
   top: 150px;
   right: 50px;
+  width: min(42vw, 520px);
+  max-height: calc(100vh - 180px);
+  overflow: auto;
   border: 1px solid black;
-  padding: 3px;
+  border-radius: 8px;
+  padding: 12px;
+  background: white;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 12%);
+}
+
+.tracks-panel h2 {
+  margin-top: 0;
+}
+
+.tracks-panel table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tracks-panel th,
+.tracks-panel td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+@media (max-width: 700px) {
+  .tracks-panel {
+    position: static;
+    width: auto;
+    max-height: none;
+    margin: 16px;
+  }
 }

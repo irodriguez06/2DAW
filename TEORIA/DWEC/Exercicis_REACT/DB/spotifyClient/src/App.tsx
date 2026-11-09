@@ -126,14 +126,21 @@ function App() {
       <main>
         {
           tracks.length > 0 ?
-            <table>
-              <thead>
-                <title>List Songs</title>
-              </thead>
-              <tbody>
-                <ListSongs tracks={tracks} />
-              </tbody>
-            </table>
+            <section className="tracks-panel">
+              <h2>Tracks</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cançó</th>
+                    <th>Artista</th>
+                    <th>Durada</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ListSongs tracks={tracks} />
+                </tbody>
+              </table>
+            </section>
             : <p>
               No track available
             </p>
