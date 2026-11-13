@@ -4,5 +4,7 @@ export interface SongCardProps {
     trackInfo: TrackView;
     play: () => void;
     like: () => void;
+    likeDisabled?: boolean;
+    likeError?: string | null;
     reset: () => void;
 }

@@ -23,10 +23,20 @@ const SongCard = (props:SongCardProps) => {
             <p>{props.trackInfo.duration}</p>
             <p>Reproduccions: {props.trackInfo.reproduccions}</p>
             <p>
-                <img onClick = {() => handleClickLike()} 
-                    src={props.trackInfo.likes.like?likedIcon:unlikedIcon} />
+                <button
+                    type="button"
+                    onClick={handleClickLike}
+                    disabled={props.likeDisabled}
+                    aria-label={props.trackInfo.likes.like ? "Dislike" : "Like"}
+                >
+                    <img
+                        src={props.trackInfo.likes.like ? likedIcon : unlikedIcon}
+                        alt={props.trackInfo.likes.like ? "Liked" : "Not liked"}
+                    />
+                </button>
                 {props.trackInfo.likes.totalLikes}
             </p>
+            {props.likeError && <p role="alert">{props.likeError}</p>}
             <p><button type="button" onClick={() => handleClickPlay()}>Play</button></p>
             <p><button type="button" onClick={() => handleClickReset()}>Reiniciar</button></p>
         </>

@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import type { AddHistory } from "../../APIManagment/History/Interfaces/HistoryCreate";
+import type {
+  AddLike,
+  GETLikeHistory,
+  LikeResponse,
+  LikeTotalResponse,
+  LikeValue,
+} from "../../APIManagment/Likes/Interfaces/Like";
 import type { GETTrack } from "../../APIManagment/Tracks/Interfaces/Track";
 import Reproduint from "../../Components/Reproduint/reproduint";
 import ListSongs from "../../Components/Songs/ListSongs";
 import SongCard from "../../Components/Songs/SongCard";
-import type { Like } from "../../Components/Songs/Types/Like";
 import type { TrackView } from "../../Components/Songs/Types/TrackView";
 import { ENV } from "../../Config/env";
 
@@ -30,13 +36,70 @@ const Play = () => {
   const [playlistTracks, setPlaylistTracks] = useState<GETTrack[]>([]);
   const [playlistTracksLoading, setPlaylistTracksLoading] = useState(false);
   const [playlistTracksError, setPlaylistTracksError] = useState<string | null>(null);
+  const [likeHistory, setLikeHistory] = useState<GETLikeHistory[]>([]);
+  const [likeHistoryLoading, setLikeHistoryLoading] = useState(true);
+  const [likeHistoryError, setLikeHistoryError] = useState<string | null>(null);
+  const [likeError, setLikeError] = useState<string | null>(null);
+  const [likeSaving, setLikeSaving] = useState(false);
+  const [likeTotalLoading, setLikeTotalLoading] = useState(false);
   const [track, setTrack] = useState<TrackView>(getRandomTrack);
   const [playingTrackTitle, setPlayingTrackTitle] = useState<string | null>(null);
 
   async function carregarDadesTrack() {
     const resposta: Response = await fetch(`${ENV.API_BASE_URL}/tracks`);
     const listTrack: GETTrack[] = await resposta.json() as GETTrack[];
-    setTracks(listTrack)
+    setTracks(listTrack);
+    if (listTrack.length > 0) {
+      const firstTrack = listTrack[0];
+      setTrack((previousTrack) => previousTrack.id
+        ? previousTrack
+        : {
+          ...firstTrack,
+          reproduccions: 0,
+          likes: { like: false, totalLikes: 0 }
+        });
+      carregarTotalLikes(firstTrack.id).catch((error: unknown) => {
+        setLikeError(error instanceof Error ? error.message : "Error carregant els likes.");
+      });
+    }
+  }
+
+  async function carregarTotalLikes(trackId: string) {
+    setLikeTotalLoading(true);
+    try {
+      const response = await fetch(`${ENV.API_BASE_URL}/likes/track/${trackId}`);
+      if (!response.ok) {
+        throw new Error(`Error carregant els likes (${response.status})`);
+      }
+      const result: LikeTotalResponse = await response.json() as LikeTotalResponse;
+      setTrack((previousTrack) => previousTrack.id === trackId
+        ? {
+          ...previousTrack,
+          likes: {
+            like: result.lastAction === 1,
+            totalLikes: result.totalLikes
+          }
+        }
+        : previousTrack);
+    } finally {
+      setLikeTotalLoading(false);
+    }
+  }
+
+  async function carregarHistorialLikes() {
+    try {
+      const response = await fetch(`${ENV.API_BASE_URL}/likes`);
+      if (!response.ok) {
+        throw new Error(`Error carregant l'historial de likes (${response.status})`);
+      }
+      const history: GETLikeHistory[] = await response.json() as GETLikeHistory[];
+      setLikeHistory(history);
+      setLikeHistoryError(null);
+    } catch (error) {
+      setLikeHistoryError(error instanceof Error ? error.message : "Error carregant l'historial de likes.");
+    } finally {
+      setLikeHistoryLoading(false);
+    }
   }
 
   async function carregarDadesPlaylist() {
@@ -95,6 +158,7 @@ const Play = () => {
     () => {
       carregarDadesTrack();
       carregarDadesPlaylist();
+      carregarHistorialLikes();
     }, []);
 
 
@@ -152,38 +216,56 @@ const Play = () => {
 
 
   function handleClickRandom() {
-    setTrack(() => ({
-      ...getRandomTrack()
-    }));
+    const randomTrack = getRandomTrack();
+    setTrack(randomTrack);
+    setLikeError(null);
+    carregarTotalLikes(randomTrack.id).catch((error: unknown) => {
+      setLikeError(error instanceof Error ? error.message : "Error carregant els likes.");
+    });
   }
 
-  function gestionarLikes() {
-    const tr = (prev: TrackView): TrackView => {
-      let increment: number = 1;
-      if (prev.likes.like) {
-        increment = -1;
-      }
-      let likeObj: Like = {
-        like: !prev.likes.like,
-        totalLikes: prev.likes.totalLikes + increment
-      };
-
-      return {
-        ...prev,
-        likes: likeObj
-      }
+  async function gestionarLikes() {
+    if (!track.id || likeSaving) {
+      return;
     }
-    setTrack(tr);
+    const likeValue: LikeValue = track.likes.like ? -1 : 1;
+    const newLike: AddLike = { track: track.id, like: likeValue };
+    setLikeSaving(true);
+    setLikeError(null);
+
+    try {
+      const response = await fetch(`${ENV.API_BASE_URL}/likes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newLike)
+      });
+      if (!response.ok) {
+        throw new Error(`Error desant el like (${response.status})`);
+      }
+
+      const result: LikeResponse = await response.json() as LikeResponse;
+      setTrack((previousTrack) => previousTrack.id === newLike.track
+        ? {
+          ...previousTrack,
+          likes: {
+            like: likeValue === 1,
+            totalLikes: result.totalLikes
+          }
+        }
+        : previousTrack);
+      setLikeHistory((previousHistory) => [result.event, ...previousHistory]);
+    } catch (error) {
+      setLikeError(error instanceof Error ? error.message : "Error desant el like.");
+    } finally {
+      setLikeSaving(false);
+    }
   }
 
   function gestionarReset() {
     setTrack((prev) => ({
       ...prev,
       reproduccions: 0,
-      likes: {
-        like: false,
-        totalLikes: 0
-      }
+      likes: prev.likes
     }));
   }
 
@@ -275,7 +357,36 @@ const Play = () => {
         </div>
 
         <section>
-          <SongCard trackInfo={track} play={handlePlay} like={() => gestionarLikes()} reset={() => gestionarReset()} />
+          <SongCard
+            trackInfo={track}
+            play={handlePlay}
+            like={gestionarLikes}
+            likeDisabled={likeSaving || likeTotalLoading || !track.id}
+            likeError={likeError}
+            reset={() => gestionarReset()}
+          />
+        </section>
+        <section className="likes-history-panel">
+          <h2>Historial de likes</h2>
+          {likeHistoryLoading ? (
+            <p>Carregant l'historial...</p>
+          ) : likeHistoryError !== null ? (
+            <p role="alert">{likeHistoryError}</p>
+          ) : likeHistory.length > 0 ? (
+            <ul>
+              {likeHistory.map((likeEvent) => (
+                <li key={likeEvent.id}>
+                  {tracks.find((trackItem) => trackItem.id === likeEvent.track)?.title ?? likeEvent.track}
+                  {" — "}
+                  {likeEvent.like === 1 ? "Like" : "Dislike"}
+                  {" — "}
+                  {new Date(likeEvent.date).toLocaleString()}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>Encara no hi ha likes ni dislikes registrats.</p>
+          )}
         </section>
         <p><button onClick={handleClickRandom}>Random</button></p >
         <Reproduint
