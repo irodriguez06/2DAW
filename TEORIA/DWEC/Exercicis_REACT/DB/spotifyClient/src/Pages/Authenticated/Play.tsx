@@ -31,7 +31,6 @@ const Play = () => {
   const [playlistTracks, setPlaylistTracks] = useState<GETTrack[]>([]);
   const [playlistTracksLoading, setPlaylistTracksLoading] = useState(false);
   const [playlistTracksError, setPlaylistTracksError] = useState<string | null>(null);
-  const [randomUser] = useState(() => users[Math.floor(Math.random() * users.length)]);
   const [track, setTrack] = useState<TrackView>(getRandomTrack);
   const [playingTrackTitle, setPlayingTrackTitle] = useState<string | null>(null);
 
