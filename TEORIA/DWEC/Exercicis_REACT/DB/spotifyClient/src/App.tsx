@@ -1,18 +1,17 @@
-import { useEffect, useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router'
 import './App.css'
-import Header from './Components/Header/Header';
-import SongCard from './Components/Songs/SongCard'
-import Reproduint from './Components/Reproduint/reproduint';
-import type { TrackView } from './Components/Songs/Types/TrackView';
-import { users } from './Data/user';
-import type { Like } from './Components/Songs/Types/Like';
-import ListSongs from './Components/Songs/ListSongs';
-import { ENV } from './Config/env';
-import type { GETTrack } from './APIManagment/Tracks/Interfaces/Track';
-import type { AddHistory } from './APIManagment/History/Interfaces/HistoryCreate';
+import Header from './Components/Header/Header'
+import Play from './Pages/Authenticated/Play'
 
 function App() {
-
+  return (
+  <BrowserRouter>
+  <Header title="Spotify" user={'Isaac'} />
+    <Routes>
+      <Route path="/Play" element={<Play />} />
+    </Routes>
+  </BrowserRouter>
+  )
 }
 
 export default App
