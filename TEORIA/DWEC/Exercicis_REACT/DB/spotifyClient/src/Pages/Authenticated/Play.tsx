@@ -7,7 +7,6 @@ import SongCard from "../../Components/Songs/SongCard";
 import type { Like } from "../../Components/Songs/Types/Like";
 import type { TrackView } from "../../Components/Songs/Types/TrackView";
 import { ENV } from "../../Config/env";
-import { users } from "../../Data/user";
 
 interface GETPlaylist {
   id: string;
