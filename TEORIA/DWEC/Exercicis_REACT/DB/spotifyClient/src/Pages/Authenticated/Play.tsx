@@ -190,7 +190,7 @@ const Play = () => {
     }
 
     const response: Response = await fetch(
-      "http://localhost:3000/traqcks/user/history",
+      "http://localhost:3000/tracks/user/history",
       {
         method: "POST",
         headers: {
