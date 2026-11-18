@@ -2,10 +2,9 @@ import { useEffect, useState, type SubmitEvent } from "react";
 import { ENV } from "../../Config/env";
 import type { GETArtist } from "../../APIManagment/Artist/Interfaces/Artist";
 import type { TrackCreate } from "../../APIManagment/Tracks/Interfaces/TrackCreate";
-import { PostTrack } from "../../APIManagment/Tracks/PostTrack";
 import type { AddSongFormProps } from "./Types/AddSongFormProps";
 
-const AddSongForm = (props:AddSongFormProps) => {
+const AddSongForm = (props: AddSongFormProps) => {
     const [artists, setArtists] = useState<GETArtist[]>([]);
     const [error, setError] = useState<string | null>(null);
 
@@ -31,15 +30,14 @@ const AddSongForm = (props:AddSongFormProps) => {
         const form = event.currentTarget;
         const dades = new FormData(event.currentTarget);
 
-        const song:TrackCreate = {
+        const song: TrackCreate = {
             title: String(dades.get("title") ?? "").trim(),
             artist: String(dades.get("artist") ?? "").trim(),
             duration: Number(dades.get("duration")),
         };
 
         try {
-            await PostTrack(song);
-            await props.refreshSongs();
+            await props.submit(song);
             form.reset();
             setError(null);
         } catch (submitError) {
@@ -49,38 +47,43 @@ const AddSongForm = (props:AddSongFormProps) => {
 
     return (
         <>
-        <h1>Afegir cançó</h1>
-        <form onSubmit={handleSubmit}>
-            <p>
-                <label>
-                    Titol: <input type="text" name="title" required />
-                </label>
-            </p>
-            <p>
-                <label>
-                    Artista: <select name="artist" required defaultValue="">
-                        <option value="" disabled>Selecciona un artista</option>
+            <h1>Afegir cançó</h1>
+            <form onSubmit={handleSubmit}>
+                <p>
+                    <label>
+                        Titol: <input type="text" name="title" defaultValue={props.song?.title} required />
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Artista:
                         {
-                        artists.map(
-                            (a: GETArtist) => (
-                                <option key={a.id} value={a.id}>{a.nom}</option>
-                            )
-                        )}
-                    </select>
-                </label>
-            </p>
-            <p>
-                <label>
-                    Durada: <input type="text" name="duration" required />
-                </label>
-            </p>
-            <p>
-                <input type="submit" value="Afegir cançó" />
-            </p>
-            {error !== null && <p role="alert">{error}</p>}
-        </form>
+                            artists.length > 0
+                                ? <select name="artist" required defaultValue={props.song?.artist_id}>
+                                    <option value="" disabled>Selecciona un artista</option>
+                                    {
+                                        artists.map(
+                                            (a: GETArtist) => (
+                                                <option key={a.id} value={a.id}>{a.nom}</option>
+                                            )
+                                        )}
+                                </select>
+                                : <></>
+                        }
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Durada: <input type="text" name="duration" defaultValue={props.song?.duration} required />
+                    </label>
+                </p>
+                <p>
+                    <input type="submit" value="Afegir cançó" />
+                </p>
+                {error !== null && <p role="alert">{error}</p>}
+            </form>
         </>
-    
+
     )
 }
 

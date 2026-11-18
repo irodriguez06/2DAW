@@ -4,10 +4,15 @@ import AddSongForm from "../../Components/Songs/AddSongForm";
 import ListSongs from "../../Components/Songs/ListSongs";
 import Reproduint from "../../Components/Reproduint/reproduint";
 import { ENV } from "../../Config/env";
+import type { FormState } from "./Types/FormState";
+import type { Track } from "../../Model/Track";
+import type { TrackCreate } from "../../APIManagment/Tracks/Interfaces/TrackCreate";
+import { PostTrack } from "../../APIManagment/Tracks/PostTrack";
+import { PutTrack } from "../../APIManagment/Tracks/PutTrack";
 
 const SongManagement = () => {
     const [tracks, setTracks] = useState<GETTrack[]>([]);
-    const [newSong, setNewSong] = useState(false);
+    const [newSong, setNewSong] = useState<FormState>( { mode:"none" } );
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [playingTrackTitle, setPlayingTrackTitle] = useState<string | null>(null);
@@ -22,6 +27,7 @@ const SongManagement = () => {
             const listTrack: GETTrack[] = await response.json() as GETTrack[];
             setError(null);
             setTracks(listTrack);
+            console.log(listTrack);
         } catch (loadError) {
             setError(loadError instanceof Error ? loadError.message : "Error carregant les cançons.");
         } finally {
@@ -29,9 +35,35 @@ const SongManagement = () => {
         }
     }
 
+    function edit(t:Track) {
+        setNewSong( 
+            {
+                mode: "edit",
+                song: t
+            } 
+        );
+    }
+
+    function addSong() {
+        setNewSong({ mode: "new" });
+    }
+
     useEffect(() => {
         void carregarDadesTrack();
     }, []);
+
+    async function save(t:TrackCreate) {
+        await PostTrack(t);
+        await carregarDadesTrack();
+        setNewSong({mode: "none"});
+    }
+
+    async function update(t:TrackCreate) {
+        const id=newSong.mode==="edit"?newSong.song?.id:"";
+        await PutTrack(t,id);
+        await carregarDadesTrack();
+        setNewSong({mode: "none"});
+    }
 
     return (
         <main>
@@ -56,6 +88,7 @@ const SongManagement = () => {
                         <tbody>
                             <ListSongs
                                 tracks={tracks}
+                                edit={edit}
                                 onPlay={(selectedTrack) => setPlayingTrackTitle(selectedTrack.title)}
                             />
                         </tbody>
@@ -65,11 +98,18 @@ const SongManagement = () => {
                 <p>No hi ha cançons disponibles.</p>
             )}
 
-            <button type="button" onClick={() => setNewSong((visible) => !visible)}>
-                {newSong ? "Tanca el formulari" : "Nova cançó"}
-            </button>
+            {newSong.mode === "none" ? (
+                <button type="button" onClick={addSong}>Afegir cançó</button>
+            ) : (
+                <button type="button" onClick={() => setNewSong({ mode: "none" })}>
+                    Tanca el formulari
+                </button>
+            )}
 
-            {newSong && <AddSongForm refreshSongs={carregarDadesTrack} />}
+            {newSong.mode === "new" && <AddSongForm submit={save} />}
+            {newSong.mode === "edit" && (
+                <AddSongForm submit={update} song={newSong.song} />
+            )}
 
             <Reproduint
                 playingTrackTitle={playingTrackTitle}
