@@ -38,6 +38,6 @@ app.use("/histories", historyRouter); // fet
 app.use("/albums", albumRouter); // fet
 app.use("/playlisttracks", playlistTrackRouter); // fet
 app.use("/albumtracks", albumTrackRouter); // fet
-app.use("/likes", likesRouter);
+app.use("/likes", likesRouter); // fet
 
 //bon dia
