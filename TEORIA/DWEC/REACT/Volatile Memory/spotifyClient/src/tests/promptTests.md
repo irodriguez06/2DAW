@@ -1,0 +1,3 @@
+**PROMPT PER FER ELS TESTS DE SPOTIFYCLIENT**
+
+Ara vull que em facis els tests necessaris per comprovar que l'aplicacio DWEC -> REACT -> spotifyClient funciona correctament. Pot ser que l'app no estigui acabada (ho se), no vull que me l'acabis ni em toquis absolutament res de codi de l'aplicació, simplement vull que em facis els tests necessaris pe spotifyClient. Després explicam tot lo que has canviat i afegit de tests, intenta tenir en compte tots els casos que creguis necessaris. Pensa tambe en fer la carpeta testos al propi src de spotifyClient
