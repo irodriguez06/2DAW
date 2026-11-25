@@ -8,11 +8,13 @@ import type { TrackCreate } from "../../APIManagment/Tracks/Interfaces/TrackCrea
 import { PostTrack } from "../../APIManagment/Tracks/PostTrack";
 import { PutTrack } from "../../APIManagment/Tracks/PutTrack";
 import AddSongForm from "../../Components/Songs/AddSongForm";
+import Reproduint from "../../Components/Reproduint/reproduint";
 
 
 const SongManagement = () => {
     const [tracks, setTracks] = useState<GETTrack[]>([]);
     const [newSong, setNewSong] = useState<FormState>({ mode: "none" });
+    const [playingTrackTitle, setPlayingTrackTitle] = useState<string | null>(null);
 
     async function carregarDadesTrack(): Promise<void> {
         const response = await fetch(`${ENV.API_BASE_URL}/tracks`);
@@ -55,6 +57,10 @@ const SongManagement = () => {
         setNewSong({ mode: "none" });
     }
 
+    function handlePlay(track: GETTrack) {
+        setPlayingTrackTitle(track.title);
+    }
+
     return (
         <main>
             <h1>Llistat de cançons</h1>
@@ -75,6 +81,7 @@ const SongManagement = () => {
                             <tbody>
                                 <ListSongs
                                     tracks={tracks}
+                                    play={handlePlay}
                                     edit={edit}
                                 />
                             </tbody>
@@ -95,7 +102,11 @@ const SongManagement = () => {
             {newSong.mode === "edit" && (
                 <AddSongForm submit={update} song={newSong.song} />
             )}
-            
+
+            <Reproduint
+                playingTrackTitle={playingTrackTitle}
+                stop={() => setPlayingTrackTitle(null)}
+            />
         </main>
     );
 };

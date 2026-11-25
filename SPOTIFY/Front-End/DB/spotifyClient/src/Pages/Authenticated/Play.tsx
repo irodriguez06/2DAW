@@ -136,7 +136,7 @@ const Play = () => {
                 <tbody>
                   <ListSongs
                     tracks={tracks}
-                    onPlay={(selectedTrack) => setPlayingTrackTitle(selectedTrack.title)}
+                    play={(selectedTrack) => setPlayingTrackTitle(selectedTrack.title)}
                   />
                 </tbody>
               </table>
