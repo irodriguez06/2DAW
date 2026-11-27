@@ -14,10 +14,6 @@ interface TrackLikeTotal {
   lastAction: LikeAction | null;
 }
 
-interface CreateLikeResponse {
-  totalLikes: number;
-}
-
 const Play = () => {
 
   const [tracks, setTracks] = useState<GETTrack[]>([]);
@@ -28,14 +24,7 @@ const Play = () => {
     const resposta: Response = await fetch(`${ENV.API_BASE_URL}/tracks`);
     const listTrack: GETTrack[] = await resposta.json() as GETTrack[];
     setTracks(listTrack);
-
-    if (listTrack.length > 0) {
-      const randomTrack = listTrack[Math.floor(Math.random() * listTrack.length)];
-      await seleccionarTrack(randomTrack);
-    }
   }
-
-  console.log(track);
 
   async function seleccionarTrack(selectedTrack: GETTrack): Promise<void> {
     const resposta: Response = await fetch(
@@ -135,7 +124,6 @@ const Play = () => {
       return;
     }
 
-    const result: CreateLikeResponse = await response.json() as CreateLikeResponse;
     // setTrack((prev) => prev === null || prev.id !== track.id
     //   ? prev
     //   : {
@@ -155,8 +143,9 @@ const Play = () => {
     // );
   }
 
-  function play() {
-
+  function play(selectedTrack: GETTrack) {
+    void seleccionarTrack(selectedTrack);
+    setPlayingTrackTitle(selectedTrack.title);
   }
 
   return (
