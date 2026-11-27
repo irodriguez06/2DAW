@@ -117,6 +117,7 @@ const SongManagement = () => {
                                     <th>Artista</th>
                                     <th>Durada</th>
                                     <th>Reproducció</th>
+                                    <th>Accions</th>
                                 </tr>
                             </thead>
                             <tbody>
