@@ -26,6 +26,9 @@ const Play = () => {
   const [tracks, setTracks] = useState<GETTrack[]>([]);
   const [track, setTrack] = useState<TrackView>(getRandomTrack);
   const [playingTrackTitle, setPlayingTrackTitle] = useState<string | null>(null);
+  const [playlists, setPlaylists] = useState<GETPlaylist[]>([]);
+  const [selectedPlaylist, setSelectedPlaylist] = useState<GETPlaylist | null>(null);
+  const [playlistTracks, setPlaylistTracks] = useState<GETTrack[]>([]);
 
   async function carregarDadesTrack() {
     const resposta: Response = await fetch(`${ENV.API_BASE_URL}/tracks`);
@@ -33,9 +36,36 @@ const Play = () => {
     setTracks(listTrack)
   }
 
+  async function carregarDadesPlaylist() {
+    const resposta: Response = await fetch(`${ENV.API_BASE_URL}/playlists`);
+    const listPlaylist: GETPlaylist[] = await resposta.json() as GETPlaylist[];
+    setPlaylists(listPlaylist);
+  }
+
+  async function seleccionarPlaylist(playlist: GETPlaylist) {
+    setSelectedPlaylist(playlist);
+    setPlaylistTracks([]);
+
+    const [playlistTracksResponse, tracksResponse] = await Promise.all([
+      fetch(`${ENV.API_BASE_URL}/playlisttracks`),
+      fetch(`${ENV.API_BASE_URL}/tracks`)
+    ]);
+
+    const playlistTrackLinks: GETPlaylistTracks[] =
+      await playlistTracksResponse.json() as GETPlaylistTracks[];
+    const allTracks: GETTrack[] = await tracksResponse.json() as GETTrack[];
+    const selectedTracks = playlistTrackLinks
+      .filter((link) => link.playlist === playlist.id)
+      .map((link) => allTracks.find((trackItem) => trackItem.id === link.track))
+      .filter((trackItem): trackItem is GETTrack => trackItem !== undefined);
+
+    setPlaylistTracks(selectedTracks);
+  }
+
   useEffect(
     () => {
       carregarDadesTrack();
+      carregarDadesPlaylist();
     }, []);
 
 
@@ -61,7 +91,7 @@ const Play = () => {
       }
     }
 
-    const newHistory:AddHistory = {
+    const newHistory: AddHistory = {
       user: "123",
       track: tracks[1].id
     }
@@ -76,12 +106,12 @@ const Play = () => {
         body: JSON.stringify(newHistory)
       })
 
-      if (!response.ok) {
-        return false;
-      }
+    if (!response.ok) {
+      return false;
+    }
 
-      const result = await response.json();
-      console.log(result);
+    const result = await response.json();
+    console.log(result);
 
     setTrack(tr);
   }
@@ -157,6 +187,10 @@ const Play = () => {
               No track available
             </p>
         }
+            <section className="playlists-panel">
+              <h2>Playlists</h2>
+              
+            </section>
 
         <section>
           <SongCard trackInfo={track} play={handlePlay} like={() => gestionarLikes()} reset={() => gestionarReset()} />
