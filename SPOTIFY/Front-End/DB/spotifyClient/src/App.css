@@ -26,6 +26,14 @@
   box-shadow: 0 2px 8px rgb(0 0 0 / 12%);
 }
 
+.song-management .tracks-panel,
+.song-management .playlists-panel {
+  position: static;
+  width: min(90vw, 780px);
+  max-height: none;
+  margin: 16px 0;
+}
+
 .tracks-panel h2,
 .playlists-panel h2 {
   margin-top: 0;

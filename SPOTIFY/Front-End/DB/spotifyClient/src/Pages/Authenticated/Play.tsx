@@ -9,26 +9,11 @@ import type { Like } from "../../Components/Songs/Types/Like";
 import type { TrackView } from "../../Components/Songs/Types/TrackView";
 import { ENV } from "../../Config/env";
 
-interface GETPlaylist {
-  id: string;
-  name?: string;
-  title?: string;
-}
-
-interface GETPlaylistTracks {
-  id: string;
-  playlist: string;
-  track: string;
-}
-
 const Play = () => {
 
   const [tracks, setTracks] = useState<GETTrack[]>([]);
   const [track, setTrack] = useState<TrackView>(getRandomTrack);
   const [playingTrackTitle, setPlayingTrackTitle] = useState<string | null>(null);
-  const [playlists, setPlaylists] = useState<GETPlaylist[]>([]);
-  const [selectedPlaylist, setSelectedPlaylist] = useState<GETPlaylist | null>(null);
-  const [playlistTracks, setPlaylistTracks] = useState<GETTrack[]>([]);
 
   async function carregarDadesTrack() {
     const resposta: Response = await fetch(`${ENV.API_BASE_URL}/tracks`);
@@ -36,36 +21,9 @@ const Play = () => {
     setTracks(listTrack)
   }
 
-  async function carregarDadesPlaylist() {
-    const resposta: Response = await fetch(`${ENV.API_BASE_URL}/playlists`);
-    const listPlaylist: GETPlaylist[] = await resposta.json() as GETPlaylist[];
-    setPlaylists(listPlaylist);
-  }
-
-  async function seleccionarPlaylist(playlist: GETPlaylist) {
-    setSelectedPlaylist(playlist);
-    setPlaylistTracks([]);
-
-    const [playlistTracksResponse, tracksResponse] = await Promise.all([
-      fetch(`${ENV.API_BASE_URL}/playlisttracks`),
-      fetch(`${ENV.API_BASE_URL}/tracks`)
-    ]);
-
-    const playlistTrackLinks: GETPlaylistTracks[] =
-      await playlistTracksResponse.json() as GETPlaylistTracks[];
-    const allTracks: GETTrack[] = await tracksResponse.json() as GETTrack[];
-    const selectedTracks = playlistTrackLinks
-      .filter((link) => link.playlist === playlist.id)
-      .map((link) => allTracks.find((trackItem) => trackItem.id === link.track))
-      .filter((trackItem): trackItem is GETTrack => trackItem !== undefined);
-
-    setPlaylistTracks(selectedTracks);
-  }
-
   useEffect(
     () => {
       carregarDadesTrack();
-      carregarDadesPlaylist();
     }, []);
 
 
@@ -187,43 +145,6 @@ const Play = () => {
               No track available
             </p>
         }
-        <section className="playlists-panel">
-          <h2>Playlists</h2>
-          <ul>
-            {playlists.map((playlist) => (
-              <li key={playlist.id}>
-                <button type="button" onClick={() => seleccionarPlaylist(playlist)}>
-                  {playlist.name ?? playlist.title ?? `Playlist ${playlist.id}`}
-                </button>
-              </li>
-            ))}
-          </ul>
-
-          {selectedPlaylist !== null && (
-            <section className="playlist-tracks-panel">
-              <h2>
-                Cançons de {selectedPlaylist.name ?? selectedPlaylist.title ?? `Playlist ${selectedPlaylist.id}`}
-              </h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Cançó</th>
-                    <th>Artista</th>
-                    <th>Durada</th>
-                    <th>Reproducció</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <ListSongs
-                    tracks={playlistTracks}
-                    play={(selectedTrack) => setPlayingTrackTitle(selectedTrack.title)}
-                  />
-                </tbody>
-              </table>
-            </section>
-          )}
-        </section>
-
         <section>
           <SongCard trackInfo={track} play={handlePlay} like={() => gestionarLikes()} reset={() => gestionarReset()} />
         </section>
