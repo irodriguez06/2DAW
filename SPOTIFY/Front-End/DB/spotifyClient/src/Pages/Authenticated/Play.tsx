@@ -187,22 +187,54 @@ const Play = () => {
               No track available
             </p>
         }
-            <section className="playlists-panel">
-              <h2>Playlists</h2>
-              
+        <section className="playlists-panel">
+          <h2>Playlists</h2>
+          <ul>
+            {playlists.map((playlist) => (
+              <li key={playlist.id}>
+                <button type="button" onClick={() => seleccionarPlaylist(playlist)}>
+                  {playlist.name ?? playlist.title ?? `Playlist ${playlist.id}`}
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          {selectedPlaylist !== null && (
+            <section className="playlist-tracks-panel">
+              <h2>
+                Cançons de {selectedPlaylist.name ?? selectedPlaylist.title ?? `Playlist ${selectedPlaylist.id}`}
+              </h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cançó</th>
+                    <th>Artista</th>
+                    <th>Durada</th>
+                    <th>Reproducció</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ListSongs
+                    tracks={playlistTracks}
+                    play={(selectedTrack) => setPlayingTrackTitle(selectedTrack.title)}
+                  />
+                </tbody>
+              </table>
             </section>
+          )}
+        </section>
 
         <section>
           <SongCard trackInfo={track} play={handlePlay} like={() => gestionarLikes()} reset={() => gestionarReset()} />
         </section>
-        <p><button onClick={handleClickRandom}>Random</button></p >
+        <p><button onClick={handleClickRandom}>Random</button></p>
         <Reproduint
           playingTrackTitle={playingTrackTitle}
           stop={() => setPlayingTrackTitle(null)}
         />
       </main>
     </>
-  )
-}
+  );
+};
 
 export default Play;
