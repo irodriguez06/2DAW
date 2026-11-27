@@ -9,6 +9,18 @@ import type { Like } from "../../Components/Songs/Types/Like";
 import type { TrackView } from "../../Components/Songs/Types/TrackView";
 import { ENV } from "../../Config/env";
 
+interface GETPlaylist {
+  id: string;
+  name?: string;
+  title?: string;
+}
+
+interface GETPlaylistTracks {
+  id: string;
+  playlist: string;
+  track: string;
+}
+
 const Play = () => {
 
   const [tracks, setTracks] = useState<GETTrack[]>([]);
