@@ -55,13 +55,13 @@ export async function createLike(item: Like): Promise<CreateLikeResult> {
         .input("track", sql.UniqueIdentifier, item.track.trim())
         .input("like", sql.Int, item.like)
         .query(`
-            INSERT INTO dbo.Likes (track_id, [like])
+            INSERT INTO dbo.Likes (track_id, [like], [date])
             OUTPUT
                 INSERTED.id,
                 INSERTED.track_id AS track,
                 INSERTED.[like],
                 INSERTED.[date]
-            SELECT Track.id, @like
+            SELECT Track.id, @like, GETDATE()
             FROM Track
             WHERE Track.id = @track
         `);
