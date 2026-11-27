@@ -18,7 +18,7 @@ const Play = () => {
 
   const [tracks, setTracks] = useState<GETTrack[]>([]);
   const [track, setTrack] = useState<TrackView | null>(null);
-  const [playingTrackTitle, setPlayingTrackTitle] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   async function carregarDadesTrack(): Promise<void> {
     const resposta: Response = await fetch(`${ENV.API_BASE_URL}/tracks`);
@@ -26,23 +26,25 @@ const Play = () => {
     setTracks(listTrack);
   }
 
-  async function seleccionarTrack(selectedTrack: GETTrack): Promise<void> {
+  async function seleccionarTrack(selectedTrack: GETTrack): Promise<boolean> {
     const resposta: Response = await fetch(
       `${ENV.API_BASE_URL}/likes/track/${selectedTrack.id}`
     );
     if (!resposta.ok) {
-      return;
+      return false;
     }
 
     const likeTotal: TrackLikeTotal = await resposta.json() as TrackLikeTotal;
-    // setTrack({
-    //   ...selectedTrack,
-    //   reproduccions: Math.floor(Math.random() * 10000),
-    //   likes: {
-    //     like: likeTotal.lastAction === 1,
-    //     totalLikes: likeTotal.totalLikes
-    //   }
-    // });
+    const isLiked = likeTotal.lastAction === 1;
+    setTrack({
+      ...selectedTrack,
+      reproduccions: 0,
+      likes: {
+        like: isLiked,
+        totalLikes: isLiked ? 1 : 0
+      }
+    });
+    return true;
   }
 
   useEffect(
@@ -75,9 +77,6 @@ const Play = () => {
       return false;
     }
 
-    const result = await response.json();
-    console.log(result);
-
     // setTrack((prev) => prev === null || prev.id !== track.id
     //   ? prev
     //   : { ...prev, reproduccions: prev.reproduccions + 1 }
@@ -90,7 +89,7 @@ const Play = () => {
     }
 
     incrementarReproduccions();
-    setPlayingTrackTitle(track.title);
+    setIsPlaying(true);
   }
 
 
@@ -100,7 +99,7 @@ const Play = () => {
     }
 
     const randomTrack = tracks[Math.floor(Math.random() * tracks.length)];
-    void seleccionarTrack(randomTrack);
+    void play(randomTrack);
   }
 
   async function gestionarLikes(): Promise<void> {
@@ -124,16 +123,16 @@ const Play = () => {
       return;
     }
 
-    // setTrack((prev) => prev === null || prev.id !== track.id
-    //   ? prev
-    //   : {
-    //     ...prev,
-    //     likes: {
-    //       like: likeValue === 1,
-    //       totalLikes: result.totalLikes
-    //     }
-    //   }
-    // );
+    setTrack((prev) => prev === null || prev.id !== track.id
+      ? prev
+      : {
+        ...prev,
+        likes: {
+          like: likeValue === 1,
+          totalLikes: likeValue === 1 ? 1 : 0
+        }
+      }
+    );
   }
 
   function gestionarReset() {
@@ -143,9 +142,11 @@ const Play = () => {
     // );
   }
 
-  function play(selectedTrack: GETTrack) {
-    void seleccionarTrack(selectedTrack);
-    setPlayingTrackTitle(selectedTrack.title);
+  async function play(selectedTrack: GETTrack): Promise<void> {
+    const trackLoaded = await seleccionarTrack(selectedTrack);
+    if (trackLoaded) {
+      setIsPlaying(true);
+    }
   }
 
   return (
@@ -183,8 +184,8 @@ const Play = () => {
         )}
         <p><button type="button" onClick={handleClickRandom}>Random</button></p>
         <Reproduint
-          playingTrackTitle={playingTrackTitle}
-          stop={() => setPlayingTrackTitle(null)}
+          playingTrackTitle={isPlaying && track !== null ? track.title : null}
+          stop={() => setIsPlaying(false)}
         />
       </main>
     </>
