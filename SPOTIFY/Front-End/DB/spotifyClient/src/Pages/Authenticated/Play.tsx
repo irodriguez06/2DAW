@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import type { AddHistory } from "../../APIManagment/History/Interfaces/HistoryCreate";
 import type { GETTrack } from "../../APIManagment/Tracks/Interfaces/Track";
-import Header from "../../Components/PageEstructure/Header/Header";
 import Reproduint from "../../Components/Reproduint/reproduint";
 import ListSongs from "../../Components/Songs/ListSongs";
 import SongCard from "../../Components/Songs/SongCard";
@@ -156,7 +155,6 @@ const Play = () => {
 
   return (
     <>
-      <Header title="Spotify" user={"Isaac"} />
       <main>
         {
           tracks.length > 0 ?
