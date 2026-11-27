@@ -35,6 +35,8 @@ const Play = () => {
     }
   }
 
+  console.log(track);
+
   async function seleccionarTrack(selectedTrack: GETTrack): Promise<void> {
     const resposta: Response = await fetch(
       `${ENV.API_BASE_URL}/likes/track/${selectedTrack.id}`
@@ -44,14 +46,14 @@ const Play = () => {
     }
 
     const likeTotal: TrackLikeTotal = await resposta.json() as TrackLikeTotal;
-    setTrack({
-      ...selectedTrack,
-      reproduccions: Math.floor(Math.random() * 10000),
-      likes: {
-        like: likeTotal.lastAction === 1,
-        totalLikes: likeTotal.totalLikes
-      }
-    });
+    // setTrack({
+    //   ...selectedTrack,
+    //   reproduccions: Math.floor(Math.random() * 10000),
+    //   likes: {
+    //     like: likeTotal.lastAction === 1,
+    //     totalLikes: likeTotal.totalLikes
+    //   }
+    // });
   }
 
   useEffect(
@@ -87,10 +89,10 @@ const Play = () => {
     const result = await response.json();
     console.log(result);
 
-    setTrack((prev) => prev === null || prev.id !== track.id
-      ? prev
-      : { ...prev, reproduccions: prev.reproduccions + 1 }
-    );
+    // setTrack((prev) => prev === null || prev.id !== track.id
+    //   ? prev
+    //   : { ...prev, reproduccions: prev.reproduccions + 1 }
+    // );
   }
 
   function handlePlay() {
@@ -134,23 +136,27 @@ const Play = () => {
     }
 
     const result: CreateLikeResponse = await response.json() as CreateLikeResponse;
-    setTrack((prev) => prev === null || prev.id !== track.id
-      ? prev
-      : {
-        ...prev,
-        likes: {
-          like: likeValue === 1,
-          totalLikes: result.totalLikes
-        }
-      }
-    );
+    // setTrack((prev) => prev === null || prev.id !== track.id
+    //   ? prev
+    //   : {
+    //     ...prev,
+    //     likes: {
+    //       like: likeValue === 1,
+    //       totalLikes: result.totalLikes
+    //     }
+    //   }
+    // );
   }
 
   function gestionarReset() {
-    setTrack((prev) => prev === null
-      ? prev
-      : { ...prev, reproduccions: 0 }
-    );
+    // setTrack((prev) => prev === null
+    //   ? prev
+    //   : { ...prev, reproduccions: 0 }
+    // );
+  }
+
+  function play() {
+
   }
 
   return (
@@ -172,7 +178,7 @@ const Play = () => {
                 <tbody>
                   <ListSongs
                     tracks={tracks}
-                    play={(selectedTrack) => setPlayingTrackTitle(selectedTrack.title)}
+                    play={play}
                   />
                 </tbody>
               </table>
